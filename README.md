@@ -59,5 +59,5 @@ This feature allows for logging in and registration of existing and new users wi
 
 - Add the `http package/library` to the project so the application can interact with the web application.
 - Use the authentication model for login, logout, and registration created in the previous task to provide users with authorization based on their roles as readers or writers.
-- Utilize the `pbp_django_auth` package/library to manage cookies, ensuring that all requests sent to the server are authenticated and authorized.
+- Utilize the `pbp_django_auth` package to manage cookies, ensuring that all requests sent to the server are authenticated and authorized.
 - Use https://app.quicktype.io/ to convert JSON data into Dart objects that will be used to create an instance of data as a class in Flutter.
