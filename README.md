@@ -42,7 +42,6 @@ This feature allows for logging in and registration of existing and new users wi
   This feature allows users to add, edit and delete reviews of restaurants. This allows other users to know what to expect from a restaurant before they decide to go there. 
 
 # Roles in the application
-
 ### 🤵‍♀️ User Role: 
   - See the list of restaurants.  
   - Navigate through the restaurant.  
@@ -56,7 +55,7 @@ This feature allows for logging in and registration of existing and new users wi
 
 # Integration with the web service to connect to the web application created in the midterm project
 
-In the process of integrating Django with Flutter, we will perform the following steps:
+#### In the process of integrating Django with Flutter, we will perform the following steps:
 
 1. Add the `http package/library` to the project so the application can interact with the web application.
 2. Use the authentication model for login, logout, and registration created in the previous task to provide users with authorization based on their roles as readers or writers.
