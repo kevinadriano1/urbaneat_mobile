@@ -8,7 +8,8 @@
 - Muhammad Raditya Indrastata Norman - 2306256450
 - Darren Marcello Sidabuntar - 2306256293
 
-# Link to the APK (not required at Stage I. The APK link can be added to README.md after completing Stage II.)
+# Link to the APK 
+Unavailable for now
 
 # Application description (name and purpose of the application)
 
@@ -17,23 +18,22 @@ UrbanEat is a food guide and review platform that focuses exclusively on restaur
 # List of modules implemented and division of work among group members
 
 - **Authentication - Login/register - Daren:**  
-  Allow for logging in and registration of existing and new users with appropriate security, allowing users to view and access the website according to their permissions.
+  This feature allows for logging in and registration of existing and new users with appropriate security, allowing users to view and access the website according to their permissions.
 
 - **Leaderboards - See top restaurants - Dito:**  
-  Allow users to see the highest-rated restaurants based on reviews and ratings so that users are well-informed on the best places where they can choose to dine. 
+ This feature allows users to see the highest-rated restaurants based on reviews and ratings so that users are well-informed on the best places where they can choose to dine. 
 
-- **User role - Edit User profiles - Guruprasanth Meyyarasu:**  
+- **User role - Edit User profiles - Guruprasanth:**  
   Users can see and edit their data (i.e. profile picture). 
 
 - **Admin role - Add/edit/delete restaurants - Flori:**  
-  Allow admin users to add their own restaurants with initially 0 reviews to the database. The type of data an admin user can add is as follows: Name, Street Address, Location, Type, Reviews (initialized at 0), No of Reviews (initialized at 0), Comments (initialized at None), Contact Number, Restaurant_Url, Menu_url, Image_url.
+  This feature allows admin users to add their own restaurants with initially 0 reviews to the database. The type of data an admin user can add is as follows: `Name`, `Street Address`, `Location`, `Type`, `Reviews (initialized at 0)`, `No of Reviews (initialized at 0)`, `Comments (initialized at None)`, `Contact Number`, `Restaurant_Url`, `Menu_url`, `Image_url`.
 
 - **Collection - Filtering/searching restaurants - Geordie:**  
-  Filter and search the restaurant based on their type of cuisine.  
-  The feature "Collection - Filtering/searching restaurants" allows users to filter and search restaurants based on their type of cuisine. This functionality enables users to easily discover restaurants that match their preferred cuisine, such as Italian, Chinese, Indian, or any other type. Users can specify their desired cuisine in the search bar or use a filter option to narrow down the available restaurants, making the process of finding a suitable dining option more efficient and tailored to their preferences.
+ This feature allows users to filter and search restaurants based on their type of cuisine. This functionality enables users to easily discover restaurants that match their preferred cuisine, such as Italian, Chinese, Indian, or any other type. Users can specify their desired cuisine in the search bar or use a filter option to narrow down the available restaurants, making the process of finding a suitable dining option more efficient and tailored to their preferences.
 
 - **Review - Users can review their favorite restaurant - Kevin:**  
-  Allow users to add, edit and delete reviews of restaurants. This allows other users to know what to expect from a restaurant before they decide to go there. 
+  This feature allows users to add, edit and delete reviews of restaurants. This allows other users to know what to expect from a restaurant before they decide to go there. 
 
 # Roles or actors of the user application
 
@@ -50,4 +50,9 @@ UrbanEat is a food guide and review platform that focuses exclusively on restaur
 
 # Integration with the web service to connect to the web application created in the midterm project
 
-We will integrate our Flutter final project with the Django web application developed during the midterm project.
+In the process of integrating Django with Flutter, we will perform the following steps:
+
+1. Add the `http package/library` to the project so the application can interact with the web application.
+2. Use the authentication model for login, logout, and registration created in the previous task to provide users with authorization based on their roles as readers or writers.
+3. Utilize the `pbp_django_auth` package/library to manage cookies, ensuring that all requests sent to the server are authenticated and authorized.
+4. Create a Catalog class in Flutter using the book dataset API with literasea.live/products/get_books/ as the endpoint. Additionally, we will use https://app.quicktype.io/ to convert JSON data into Dart objects that will be used to create the Catalog class in Flutter.
