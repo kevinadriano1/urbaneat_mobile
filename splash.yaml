@@ -1,0 +1,12 @@
+flutter_native_splash:
+  color: "#00000F"
+  color_dark: "#000000"
+  image: assets\icons\urbaneat_white.png
+  image_dark: assets\icons\urbaneat_white.png
+  android_12:
+    color: "#00000F"
+    color_dark: "#000000"
+    image: assets\icons\urbaneat_white.png
+    image_dark: assets\icons\urbaneat_white.png
+
+  web: true
