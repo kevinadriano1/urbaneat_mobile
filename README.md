@@ -1,15 +1,75 @@
-# UrbanEat
-
 ## Group Members
-- Flori Andrea Ng - 2306171713
-- Guruprasanth Meyyarasu
-- Kevin Adriano - 2306172552
-- Geordie Vannese Hardjanto - 2306170414
-- Muhammad Raditya Indrastata Norman - 2306256450
-- Darren Marcello Sidabuntar - 2306256293
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>NPM</th>
+      <th>GitHub Username</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Flori Andrea Ng</td>
+      <td>2306171713</td>
+      <td>Mcflurrins</td>
+    </tr>
+    <tr>
+      <td>Guruprasanth Meyyarasu</td>
+      <td>-</td>
+      <td>Goosegamer</td>
+    </tr>
+    <tr>
+      <td>Kevin Adriano</td>
+      <td>2306172552</td>
+      <td>kevinadriano1</td>
+    </tr>
+    <tr>
+      <td>Geordie Vannese Hardjanto</td>
+      <td>2306170414</td>
+      <td>geordievannese</td>
+    </tr>
+    <tr>
+      <td>Muhammad Raditya Indrastata Norman</td>
+      <td>2306256450</td>
+      <td>aditonorman</td>
+    </tr>
+    <tr>
+      <td>Darren Marcello Sidabuntar</td>
+      <td>2306256293</td>
+      <td>DarrenM07</td>
+    </tr>
+  </tbody>
+</table>
+
 
 # Link to the APK 
 Unavailable for now
+
+# Mock Up
+### View Full Figma Mock-Up here: 
+https://www.figma.com/design/qSCRyapsGr5TNHYpj4m0Ul/UrbanEat-Mobile?node-id=0-1&node-type=canvas&t=FsljrNcOH63j4SR4-0 
+
+<table>
+  <tr>
+    <td>
+      <img src="https://github.com/user-attachments/assets/2fa7e926-0b4f-4b24-841f-4b936096f774" alt="Onboarding" width="200">
+      <p>Onboarding</p>
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/e022822e-ee4c-469f-a82f-c457edeaa192" alt="Login" width="200">
+      <p>Login</p>
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/a53f78d2-783e-42fa-9237-579c079fa56d" alt="Info Page" width="200">
+      <p>Info Page</p>
+    </td>
+    <td>
+      <img src="https://github.com/user-attachments/assets/262de2a9-9e45-4fbe-a8d5-59c36866dd3a" alt="Main Page" width="200">
+      <p>Main Page</p>
+    </td>
+  </tr>
+</table>
+
 
 # Application description (name and purpose of the application)
 
