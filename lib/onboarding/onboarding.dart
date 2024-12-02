@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbaneat/screens/login.dart'; // Ensure the correct path to `LoginPage` is imported.
 
 class OnBoardingScreen extends StatelessWidget {
   @override
@@ -6,16 +7,16 @@ class OnBoardingScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // bg image
+          // Background image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
-                image: AssetImage('assets/images/onboarding_bg.jpg'), 
+                image: AssetImage('assets/images/onboarding_bg.jpg'),
                 fit: BoxFit.cover,
               ),
             ),
           ),
-          // white box
+          // White box
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
@@ -30,7 +31,7 @@ class OnBoardingScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // logo n app name
+                    // Logo and app name
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -62,7 +63,11 @@ class OnBoardingScreen extends StatelessWidget {
                     // Get Started button
                     ElevatedButton(
                       onPressed: () {
-                        // put navigation function to auth screen here 
+                        // Navigate to LoginPage
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const LoginPage()),
+                        );
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
@@ -70,7 +75,9 @@ class OnBoardingScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(30),
                         ),
                         padding: const EdgeInsets.symmetric(
-                            vertical: 15, horizontal: 50),
+                          vertical: 15, 
+                          horizontal: 50,
+                        ),
                       ),
                       child: const Text(
                         'Get Started',
