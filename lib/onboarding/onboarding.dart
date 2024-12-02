@@ -36,7 +36,7 @@ class OnBoardingScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          'assets/icons/urbaneat_white.png',
+                          'assets/icons/urbaneat_black.png',
                           height: 40,
                         ),
                         const SizedBox(width: 10),
@@ -81,7 +81,10 @@ class OnBoardingScreen extends StatelessWidget {
                       ),
                       child: const Text(
                         'Get Started',
-                        style: TextStyle(fontSize: 16),
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white, // Set the text color to white
+                        ),
                       ),
                     ),
                     const SizedBox(height: 20),
