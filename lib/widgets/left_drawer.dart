@@ -11,14 +11,14 @@ class LeftDrawer extends StatelessWidget {
     return Drawer(
       child: ListView(
         children: [
-          DrawerHeader(
+          const DrawerHeader(
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.black,
             ),
-            child: const Column(
+            child: Column(
               children: [
                 Text(
-                  'Mental Health Tracker',
+                  'URBANEATS',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -28,7 +28,7 @@ class LeftDrawer extends StatelessWidget {
                 ),
                 Padding(padding: EdgeInsets.all(8)),
                 Text(
-                  "Track your mental health every day here!",
+                  "Search The Most Scrumptious Restaurants Here!",
                   textAlign: TextAlign.center, // Center alignment
                   style: TextStyle(
                     fontSize: 15.0, // Font size 15

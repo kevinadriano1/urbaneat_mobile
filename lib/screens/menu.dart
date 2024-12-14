@@ -115,18 +115,20 @@ class _MyHomePageState extends State<MyHomePage> {
                   showModalBottomSheet(
                     context: context,
                     builder: (BuildContext context) {
-                      return Wrap(
-                        children: filters.map((filter) {
-                          return ListTile(
-                            title: Text(filter),
-                            onTap: () {
-                              setState(() {
-                                selectedFilter = filter;
-                              });
-                              Navigator.pop(context);
-                            },
-                          );
-                        }).toList(),
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: filters.map((filter) {
+                            return ListTile(
+                              title: Text(filter),
+                              onTap: () {
+                                setState(() {
+                                  selectedFilter = filter;
+                                });
+                                Navigator.pop(context);
+                              },
+                            );
+                          }).toList(),
+                        ),
                       );
                     },
                   );
@@ -187,11 +189,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     List filteredData = snapshot.data.where((food) {
                       final matchesSearch = searchController.text.isEmpty ||
                           food.fields.name.toLowerCase().contains(searchController.text.toLowerCase()) ||
-                          food.fields.foodType.toLowerCase().contains(searchController.text.toLowerCase()) ||
-                          [
-                            "asian", "italian", "american", "seafood", "vegan", "chinese", "japanese", "mexican", "american", "indian", "thai", "french", "spanish", "korean", "mediterranean"
-                          ].any((keyword) =>
-                              keyword.contains(searchController.text.toLowerCase()));
+                          food.fields.foodType.toLowerCase().contains(searchController.text.toLowerCase());
                       final matchesFilter = selectedFilter.isEmpty ||
                           food.fields.foodType.toLowerCase().contains(selectedFilter.toLowerCase());
                       return matchesSearch && matchesFilter;
