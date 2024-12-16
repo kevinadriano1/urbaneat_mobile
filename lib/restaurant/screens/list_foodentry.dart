@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:urbaneat/add_edit_resto/screens/edit_resto.dart';
 import 'package:urbaneat/restaurant/services/api_service.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
@@ -53,7 +54,13 @@ class _FoodEntryPageState extends State<FoodEntryPage> {
               itemCount: snapshot.data.length,
               itemBuilder: (_, index) {
                 final food = snapshot.data[index];
-                return FoodCard(food: food);
+                return FoodCard(
+                  food: food,
+                  onDelete: () {
+                    // Delete logic for the food item,, placeholder for now
+                    print('Delete button pressed for food ID: ${food.pk}');
+                  },
+                );
               },
             );
           }
@@ -67,73 +74,113 @@ class FoodCard extends StatelessWidget {
   const FoodCard({
     super.key,
     required this.food,
+    required this.onDelete,
   });
 
   final dynamic food;
+  final VoidCallback onDelete;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => RestaurantDetailPage(
-              restaurantId: food.pk,
+    return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 2,
+            blurRadius: 5,
+            offset: const Offset(0, 3),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          // Main InkWell for navigating to details
+          InkWell(
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => RestaurantDetailPage(
+                    restaurantId: food.pk,
+                  ),
+                ),
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.all(20.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    food.fields.name,
+                    style: const TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Text("Address: ${food.fields.streetAddress}"),
+                  const SizedBox(height: 8),
+                  Text("Location: ${food.fields.location}"),
+                  const SizedBox(height: 8),
+                  Text("Food Type: ${food.fields.foodType}"),
+                  const SizedBox(height: 8),
+                  Text(
+                    "Average Rating: ${food.fields.avgRating}",
+                    style: const TextStyle(
+                      fontSize: 16.0,
+                      color: Colors.black,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  food.fields.imageUrl.isNotEmpty
+                      ? Image.network(
+                          food.fields.imageUrl,
+                          height: 200,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        )
+                      : const Text('No image available'),
+                ],
+              ),
             ),
           ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        padding: const EdgeInsets.all(20.0),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              food.fields.name,
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
+          // Edit and Delete buttons
+          Positioned(
+            top: 8,
+            right: 8,
+            child: GestureDetector(
+              behavior: HitTestBehavior.translucent, // Allows clicks to propagate
+              child: Row(
+                children: [
+                  // Edit Icon
+                  IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.blue),
+                    tooltip: 'Edit Restaurant',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EditRestaurantForm(),
+                        ),
+                      );
+                    },
+                  ),
+                  // Delete Icon
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red),
+                    tooltip: 'Delete Restaurant',
+                    onPressed: onDelete,
+                  ),
+                ],
               ),
             ),
-            const SizedBox(height: 8),
-            Text("Address: ${food.fields.streetAddress}"),
-            const SizedBox(height: 8),
-            Text("Location: ${food.fields.location}"),
-            const SizedBox(height: 8),
-            Text("Food Type: ${food.fields.foodType}"),
-            const SizedBox(height: 8),
-            Text(
-              "Average Rating: ${food.fields.avgRating}",
-              style: const TextStyle(
-                fontSize: 16.0,
-                color: Color.fromARGB(255, 0, 0, 0),
-              ),
-            ),
-            const SizedBox(height: 8),
-            food.fields.imageUrl.isNotEmpty
-                ? Image.network(
-                    food.fields.imageUrl,
-                    height: 200,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                  )
-                : const Text('No image available'),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
