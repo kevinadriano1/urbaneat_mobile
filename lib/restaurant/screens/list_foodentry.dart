@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:urbaneat/models/food_entry.dart';
+import 'package:urbaneat/restaurant/services/api_service.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:urbaneat/screens/restaurantdetail.dart';
+import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:urbaneat/widgets/left_drawer.dart';
 import 'package:provider/provider.dart';
-// Import the detail page widget
 
 class FoodEntryPage extends StatefulWidget {
   const FoodEntryPage({super.key});
@@ -14,29 +13,24 @@ class FoodEntryPage extends StatefulWidget {
 }
 
 class _FoodEntryPageState extends State<FoodEntryPage> {
-  Future<List<FoodEntry>> fetchFoodEntries(CookieRequest request) async {
-    final response = await request.get('http://localhost:8000/json/');
-    var data = response;
+  late ApiService apiService;
 
-    List<FoodEntry> listFood = [];
-    for (var d in data) {
-      if (d != null) {
-        listFood.add(FoodEntry.fromJson(d));
-      }
-    }
-    return listFood;
+  @override
+  void initState() {
+    super.initState();
+    final request = context.read<CookieRequest>();
+    apiService = ApiService(request);
   }
 
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Food Entry List'),
       ),
       drawer: const LeftDrawer(),
       body: FutureBuilder(
-        future: fetchFoodEntries(request),
+        future: apiService.fetchFoodEntries(),
         builder: (context, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());

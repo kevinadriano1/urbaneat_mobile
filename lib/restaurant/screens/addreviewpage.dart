@@ -1,7 +1,7 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:urbaneat/restaurant/services/api_service.dart';
 
 class AddReviewPage extends StatefulWidget {
   final String restaurantId;
@@ -16,11 +16,17 @@ class _AddReviewPageState extends State<AddReviewPage> {
   final _formKey = GlobalKey<FormState>();
   double _rating = 0.0;
   String _comment = '';
+  late ApiService apiService;
+
+  @override
+  void initState() {
+    super.initState();
+    final request = context.read<CookieRequest>();
+    apiService = ApiService(request);
+  }
 
   @override
   Widget build(BuildContext context) {
-    final request = context.watch<CookieRequest>();
-
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Review'),
@@ -90,30 +96,33 @@ class _AddReviewPageState extends State<AddReviewPage> {
                   ),
                   onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      final response = await request.postJson(
-                        "http://localhost:8000/reviews/restaurant/${widget.restaurantId}/add_review_flutter/",
-                        jsonEncode(<String, dynamic>{
-                          'rating': _rating.toString(),
-                          'comment': _comment,
-                        }),
-                      );
+                      try {
+                        final response = await apiService.addReview(
+                            widget.restaurantId, _rating, _comment);
 
-                      if (context.mounted) {
-                        if (response['success'] == true) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text("Review added successfully!"),
-                            ),
-                          );
-                          Navigator.pop(context, true); // Notify success
-                        } else {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                  "Failed to add review: ${response['errors'] ?? 'Unknown error.'}"),
-                            ),
-                          );
+                        if (context.mounted) {
+                          if (response['success'] == true) {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                content: Text("Review added successfully!"),
+                              ),
+                            );
+                            Navigator.pop(context, true); // Notify success
+                          } else {
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text(
+                                    "Failed to add review: ${response['errors'] ?? 'Unknown error.'}"),
+                              ),
+                            );
+                          }
                         }
+                      } catch (e) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text("An error occurred: $e"),
+                          ),
+                        );
                       }
                     }
                   },

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:urbaneat/widgets/left_drawer.dart';
-import 'package:urbaneat/screens/list_foodentry.dart';
+import 'package:urbaneat/restaurant/screens/list_foodentry.dart';
 import 'package:urbaneat/screens/moodentry_form.dart';
-import 'package:urbaneat/models/food_entry.dart';
+import 'package:urbaneat/restaurant/models/food_entry.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:urbaneat/screens/restaurantdetail.dart';
+import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:provider/provider.dart';
 
 class ItemHomepage {
@@ -427,7 +427,7 @@ String _findClosestResponse(String query) {
   }
 
   Future<List<FoodEntry>> fetchFoodEntries(CookieRequest request) async {
-    final response = await request.get('http://localhost:8000/json/');
+    final response = await request.get('https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/json/');
     var data = response;
 
     List<FoodEntry> listFood = [];

@@ -121,7 +121,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
                           // Check credentials
                           final response = await request.postJson(
-                              "http://localhost:8000/auth/register_flutter/",
+                              "https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/auth/register_flutter/",
                               jsonEncode({
                                 "username": username,
                                 "password1": password1,

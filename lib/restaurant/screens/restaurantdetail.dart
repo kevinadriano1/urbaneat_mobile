@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
-import 'package:urbaneat/screens/addreviewpage.dart';
-import 'package:urbaneat/widgets/left_drawer.dart'; // Ensure this is the correct import path
+import 'package:urbaneat/restaurant/services/api_service.dart';
+import 'package:urbaneat/restaurant/screens/addreviewpage.dart';
+import 'package:urbaneat/widgets/left_drawer.dart';
 
 class RestaurantDetailPage extends StatefulWidget {
   final String restaurantId;
@@ -14,24 +15,20 @@ class RestaurantDetailPage extends StatefulWidget {
 }
 
 class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
+  late ApiService apiService;
   late Future<Map<String, dynamic>> _restaurantDetails;
-
-  Future<Map<String, dynamic>> fetchRestaurantDetails(CookieRequest request) async {
-    final response = await request.get('http://localhost:8000/reviews/restaurant/${widget.restaurantId}/');
-    return response;
-  }
 
   @override
   void initState() {
     super.initState();
     final request = context.read<CookieRequest>();
-    _restaurantDetails = fetchRestaurantDetails(request);
+    apiService = ApiService(request);
+    _restaurantDetails = apiService.fetchRestaurantDetails(widget.restaurantId);
   }
 
   void _refreshDetails() {
-    final request = context.read<CookieRequest>();
     setState(() {
-      _restaurantDetails = fetchRestaurantDetails(request);
+      _restaurantDetails = apiService.fetchRestaurantDetails(widget.restaurantId);
     });
   }
 
@@ -41,7 +38,7 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
       appBar: AppBar(
         title: const Text('Restaurant Details'),
       ),
-      drawer: const LeftDrawer(), // Adding the Drawer
+      drawer: const LeftDrawer(),
       body: FutureBuilder(
         future: _restaurantDetails,
         builder: (context, AsyncSnapshot snapshot) {
@@ -94,8 +91,7 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                     onTap: () {
                       final url = restaurant['trip_advisor_url'];
                       if (url != null && url.isNotEmpty) {
-                        // Launch the TripAdvisor URL
-                        // You might need to use `url_launcher` package
+                        // Launch the TripAdvisor URL using url_launcher package
                       }
                     },
                     child: Text(

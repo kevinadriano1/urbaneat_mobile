@@ -1,4 +1,4 @@
-import 'package:urbaneat/screens/list_foodentry.dart';
+import 'package:urbaneat/restaurant/screens/list_foodentry.dart';
 import 'package:urbaneat/screens/moodentry_form.dart';
 import 'package:flutter/material.dart';
 class ItemHomepage {
