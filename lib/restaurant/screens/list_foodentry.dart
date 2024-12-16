@@ -165,7 +165,7 @@ class FoodCard extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => EditRestaurantForm(),
+                          builder: (_) => EditRestaurantForm(id: food.pk),
                         ),
                       );
                     },

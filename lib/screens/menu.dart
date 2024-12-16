@@ -433,7 +433,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   Future<List<FoodEntry>> fetchFoodEntries(CookieRequest request) async {
     final response = await request
-        .get('https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/json/');
+        .get(
+          //'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/json/'
+          'http://localhost:8000/json/'
+          );
     var data = response;
 
     List<FoodEntry> listFood = [];
