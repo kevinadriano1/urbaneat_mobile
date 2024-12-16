@@ -7,6 +7,8 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:provider/provider.dart';
 
+import '../add_edit_resto/screens/add_resto.dart';
+
 class ItemHomepage {
   final String name;
   final IconData icon;
@@ -237,6 +239,7 @@ String _findClosestResponse(String query) {
                           padding: const EdgeInsets.symmetric(horizontal: 8.0),
                           child: ItemCard(items[index]),
                         );
+                        
                       },
                     ),
                   ),
@@ -477,7 +480,7 @@ class ItemCard extends StatelessWidget {
           if (item.name == "Add Restaurant") {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const MoodEntryFormPage()),
+              MaterialPageRoute(builder: (context) => AddRestaurantForm()),
             );
           } else if (item.name == "View Restaurant") {
             Navigator.push(

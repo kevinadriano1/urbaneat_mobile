@@ -131,6 +131,7 @@ class _LoginPageState extends State<LoginPage> {
                           if (request.loggedIn) {
                             String message = response['message'];
                             String uname = response['username'];
+                            String? urole = response['user_role']; //userrole not yet deployed to pws so rn this will cause null
                             if (context.mounted) {
                               Navigator.pushReplacement(
                                 context,
@@ -140,7 +141,7 @@ class _LoginPageState extends State<LoginPage> {
                                 ..hideCurrentSnackBar()
                                 ..showSnackBar(
                                   SnackBar(
-                                      content: Text("$message Welcome, $uname.")),
+                                      content: Text("$message Welcome, $uname. Your role is $urole.")),
                                 );
                             }
                           } else {

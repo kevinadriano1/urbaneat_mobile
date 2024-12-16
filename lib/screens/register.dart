@@ -15,6 +15,7 @@ class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
+  String _selectedRole = 'user'; // Default role
 
   @override
   Widget build(BuildContext context) {
@@ -112,6 +113,41 @@ class _RegisterPageState extends State<RegisterPage> {
                           return null;
                         },
                       ),
+                      const SizedBox(height: 20.0),
+                      // Role Selection
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Select Role:',
+                            style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
+                          ),
+                          ListTile(
+                            title: const Text('User'),
+                            leading: Radio<String>(
+                              value: 'user',
+                              groupValue: _selectedRole,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedRole = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          ListTile(
+                            title: const Text('Restaurant Manager'),
+                            leading: Radio<String>(
+                              value: 'manager',
+                              groupValue: _selectedRole,
+                              onChanged: (value) {
+                                setState(() {
+                                  _selectedRole = value!;
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
                       const SizedBox(height: 24.0),
                       ElevatedButton(
                         onPressed: () async {
@@ -126,6 +162,7 @@ class _RegisterPageState extends State<RegisterPage> {
                                 "username": username,
                                 "password1": password1,
                                 "password2": password2,
+                                "group_choice": _selectedRole,
                               }));
                           if (context.mounted) {
                             if (response['status'] == 'success') {

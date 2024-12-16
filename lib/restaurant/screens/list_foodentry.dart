@@ -53,73 +53,87 @@ class _FoodEntryPageState extends State<FoodEntryPage> {
               itemCount: snapshot.data.length,
               itemBuilder: (_, index) {
                 final food = snapshot.data[index];
-                return InkWell(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => RestaurantDetailPage(
-                          restaurantId: food.pk,
-                        ),
-                      ),
-                    );
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                    padding: const EdgeInsets.all(20.0),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8.0),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.5),
-                          spreadRadius: 2,
-                          blurRadius: 5,
-                          offset: const Offset(0, 3),
-                        ),
-                      ],
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          food.fields.name,
-                          style: const TextStyle(
-                            fontSize: 18.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text("Address: ${food.fields.streetAddress}"),
-                        const SizedBox(height: 8),
-                        Text("Location: ${food.fields.location}"),
-                        const SizedBox(height: 8),
-                        Text("Food Type: ${food.fields.foodType}"),
-                        const SizedBox(height: 8),
-                        Text(
-                          "Average Rating: ${food.fields.avgRating}",
-                          style: const TextStyle(
-                            fontSize: 16.0,
-                            color: Color.fromARGB(255, 0, 0, 0),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        food.fields.imageUrl.isNotEmpty
-                            ? Image.network(
-                                food.fields.imageUrl,
-                                height: 200,
-                                width: double.infinity,
-                                fit: BoxFit.cover,
-                              )
-                            : const Text('No image available'),
-                      ],
-                    ),
-                  ),
-                );
+                return FoodCard(food: food);
               },
             );
           }
         },
+      ),
+    );
+  }
+}
+
+class FoodCard extends StatelessWidget {
+  const FoodCard({
+    super.key,
+    required this.food,
+  });
+
+  final dynamic food;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RestaurantDetailPage(
+              restaurantId: food.pk,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        padding: const EdgeInsets.all(20.0),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              food.fields.name,
+              style: const TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text("Address: ${food.fields.streetAddress}"),
+            const SizedBox(height: 8),
+            Text("Location: ${food.fields.location}"),
+            const SizedBox(height: 8),
+            Text("Food Type: ${food.fields.foodType}"),
+            const SizedBox(height: 8),
+            Text(
+              "Average Rating: ${food.fields.avgRating}",
+              style: const TextStyle(
+                fontSize: 16.0,
+                color: Color.fromARGB(255, 0, 0, 0),
+              ),
+            ),
+            const SizedBox(height: 8),
+            food.fields.imageUrl.isNotEmpty
+                ? Image.network(
+                    food.fields.imageUrl,
+                    height: 200,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
+                  )
+                : const Text('No image available'),
+          ],
+        ),
       ),
     );
   }
