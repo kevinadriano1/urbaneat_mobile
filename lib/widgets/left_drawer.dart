@@ -1,12 +1,35 @@
 import 'package:flutter/material.dart';
 import 'package:urbaneat/restaurant/screens/list_foodentry.dart';
 import 'package:urbaneat/screens/menu.dart';
+import '../add_edit_resto/services/user_role_service.dart';
 import 'package:urbaneat/screens/moodentry_form.dart';
 import 'package:urbaneat/leaderboards/leaderboard_page.dart';
 import 'package:urbaneat/leaderboards/recommendations_page.dart';
+import '../add_edit_resto/screens/add_resto.dart';
 
-class LeftDrawer extends StatelessWidget {
+class LeftDrawer extends StatefulWidget {
   const LeftDrawer({super.key});
+
+  @override
+  _LeftDrawerState createState() => _LeftDrawerState();
+}
+
+class _LeftDrawerState extends State<LeftDrawer> {
+  String? _userRole;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserRole(); // Fetch the user role when the drawer is initialized
+  }
+
+  // Fetch the user role from UserRoleService
+  Future<void> _fetchUserRole() async {
+    String userRole = await UserRoleService.fetchUserRole();
+    setState(() {
+      _userRole = userRole;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -31,11 +54,11 @@ class LeftDrawer extends StatelessWidget {
                 Padding(padding: EdgeInsets.all(8)),
                 Text(
                   "Search The Most Scrumptious Restaurants Here!",
-                  textAlign: TextAlign.center, // Center alignment
+                  textAlign: TextAlign.center,
                   style: TextStyle(
-                    fontSize: 15.0, // Font size 15
-                    color: Colors.white, // White color
-                    fontWeight: FontWeight.normal, // Normal weight
+                    fontSize: 15.0,
+                    color: Colors.white,
+                    fontWeight: FontWeight.normal,
                   ),
                 ),
               ],
@@ -52,18 +75,20 @@ class LeftDrawer extends StatelessWidget {
                   ));
             },
           ),
-          ListTile(
-            leading: const Icon(Icons.mood),
-            title: const Text('Add Mood'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const MoodEntryFormPage(),
-                ),
-              );
-            },
-          ),
+          // Only show "Add Restaurant" if the user role is Restaurant_Manager
+          if (_userRole == 'Restaurant_Manager')
+            ListTile(
+              leading: const Icon(Icons.mood),
+              title: const Text('Add Restaurant'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AddRestaurantForm(),
+                  ),
+                );
+              },
+            ),
           ListTile(
             leading: const Icon(Icons.add_reaction_rounded),
             title: const Text('Mood List'),
@@ -76,7 +101,7 @@ class LeftDrawer extends StatelessWidget {
               );
             },
           ),
-          const Divider(), // Adds a visual separation
+          const Divider(),
           ListTile(
             leading: const Icon(Icons.leaderboard),
             title: const Text('Leaderboard'),

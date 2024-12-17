@@ -8,6 +8,7 @@ import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:provider/provider.dart';
 
 import '../add_edit_resto/screens/add_resto.dart';
+import '../add_edit_resto/services/user_role_service.dart';
 import '../restaurant/services/api_service.dart';
 
 class ItemHomepage {
@@ -472,10 +473,31 @@ class FilterChipWidget extends StatelessWidget {
   }
 }
 
-class ItemCard extends StatelessWidget {
+class ItemCard extends StatefulWidget {
   final ItemHomepage item;
 
   const ItemCard(this.item, {super.key});
+
+  @override
+  _ItemCardState createState() => _ItemCardState();
+}
+
+class _ItemCardState extends State<ItemCard> {
+  String? _userRole;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserRole(); // Fetch user role when widget is created
+  }
+
+  // Fetch user role using UserRoleService
+  Future<void> _fetchUserRole() async {
+    String userRole = await UserRoleService.fetchUserRole();
+    setState(() {
+      _userRole = userRole;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -487,42 +509,45 @@ class ItemCard extends StatelessWidget {
           ScaffoldMessenger.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(SnackBar(
-                content: Text("You pressed the ${item.name} button!")));
+                content: Text("You pressed the ${widget.item.name} button!")));
 
-          if (item.name == "Add Restaurant") {
+          if (widget.item.name == "Add Restaurant" && _userRole == 'Restaurant_Manager') {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AddRestaurantForm()),
             );
-          } else if (item.name == "View Restaurant") {
+          } else if (widget.item.name == "View Restaurant") {
             Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => const FoodEntryPage()),
             );
           }
         },
-        child: Container(
-          padding: const EdgeInsets.all(8),
-          constraints: const BoxConstraints(
-            minWidth: 100.0, // Ensures a minimum width
-            maxWidth: 120.0, // Prevents overflow in horizontal ListView
-          ),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  item.icon,
-                  color: Colors.white,
-                  size: 30.0,
-                ),
-                const Padding(padding: EdgeInsets.all(3)),
-                Text(
-                  item.name,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(color: Colors.white),
-                ),
-              ],
+        child: Visibility(
+          visible: widget.item.name != "Add Restaurant" || _userRole == 'Restaurant_Manager',
+          child: Container(
+            padding: const EdgeInsets.all(8),
+            constraints: const BoxConstraints(
+              minWidth: 100.0,
+              maxWidth: 120.0,
+            ),
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    widget.item.icon,
+                    color: Colors.white,
+                    size: 30.0,
+                  ),
+                  const Padding(padding: EdgeInsets.all(3)),
+                  Text(
+                    widget.item.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(color: Colors.white),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
