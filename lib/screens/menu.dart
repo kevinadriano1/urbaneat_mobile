@@ -346,11 +346,6 @@ class _MyHomePageState extends State<MyHomePage> {
                             //be reusable
                             return FoodCard(
                               food: food,
-                              onDelete: () {
-                                // Delete logic for the food item,, placeholder for now
-                                print(
-                                    'Delete button pressed for food ID: ${food.pk}');
-                              },
                             );
                           },
                         );

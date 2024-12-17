@@ -5,6 +5,8 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:urbaneat/widgets/left_drawer.dart';
 import 'package:provider/provider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FoodEntryPage extends StatefulWidget {
   const FoodEntryPage({super.key});
@@ -56,10 +58,6 @@ class _FoodEntryPageState extends State<FoodEntryPage> {
                 final food = snapshot.data[index];
                 return FoodCard(
                   food: food,
-                  onDelete: () {
-                    // Delete logic for the food item,, placeholder for now
-                    print('Delete button pressed for food ID: ${food.pk}');
-                  },
                 );
               },
             );
@@ -70,16 +68,41 @@ class _FoodEntryPageState extends State<FoodEntryPage> {
   }
 }
 
+//the food card widget (reusable)
 class FoodCard extends StatelessWidget {
   const FoodCard({
     super.key,
     required this.food,
-    required this.onDelete,
   });
 
   final dynamic food;
-  final VoidCallback onDelete;
 
+  //function for deleting restaurants 
+  Future<void> deleteRestaurant(BuildContext context) async {
+    final url = Uri.parse('http://localhost:8000/admin_role/delete_resto_api/${food.pk}/');
+
+    try {
+      final response = await http.delete(url);
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(data['message'])),
+        );
+      } else {
+        final data = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: ${data['message']}')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete restaurant: $e')),
+      );
+    }
+  }
+
+  //the actual front end
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -153,31 +176,30 @@ class FoodCard extends StatelessWidget {
           Positioned(
             top: 8,
             right: 8,
-            child: GestureDetector(
-              behavior: HitTestBehavior.translucent, // Allows clicks to propagate
-              child: Row(
-                children: [
-                  // Edit Icon
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.blue),
-                    tooltip: 'Edit Restaurant',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => EditRestaurantForm(id: food.pk),
-                        ),
-                      );
-                    },
-                  ),
-                  // Delete Icon
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    tooltip: 'Delete Restaurant',
-                    onPressed: onDelete,
-                  ),
-                ],
-              ),
+            child: Row(
+              children: [
+                // Edit Icon
+                IconButton(
+                  icon: const Icon(Icons.edit, color: Colors.blue),
+                  tooltip: 'Edit Restaurant',
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => EditRestaurantForm(id: food.pk),
+                      ),
+                    );
+                  },
+                ),
+                // Delete Icon
+                IconButton(
+                  icon: const Icon(Icons.delete, color: Colors.red),
+                  tooltip: 'Delete Restaurant',
+                  onPressed: () async {
+                    await deleteRestaurant(context);
+                  },
+                ),
+              ],
             ),
           ),
         ],
