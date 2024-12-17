@@ -44,7 +44,7 @@ class Fields {
     String tripAdvisorUrl;
     String menuInfo;
     String imageUrl;
-    String avgRating;
+    String? avgRating;
 
     Fields({
         required this.name,
@@ -73,7 +73,7 @@ class Fields {
         tripAdvisorUrl: json["trip_advisor_url"],
         menuInfo: json["menu_info"],
         imageUrl: json["image_url"],
-        avgRating: json["avg_rating"],
+        avgRating: json["avg_rating"].toString(),
     );
 
     Map<String, dynamic> toJson() => {
