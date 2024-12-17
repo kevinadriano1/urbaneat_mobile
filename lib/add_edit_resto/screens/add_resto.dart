@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert'; // For JSON encoding
-import 'package:http/http.dart' as http; // For HTTP requests
+import 'package:urbaneat/restaurant/services/api_service.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart'; // For CookieRequest
 
 class AddRestaurantForm extends StatefulWidget {
   @override
@@ -9,6 +9,7 @@ class AddRestaurantForm extends StatefulWidget {
 
 class _AddRestaurantFormState extends State<AddRestaurantForm> {
   final _formKey = GlobalKey<FormState>();
+  late ApiService apiService;
 
   // Controllers for the input fields
   final TextEditingController nameController = TextEditingController();
@@ -21,16 +22,18 @@ class _AddRestaurantFormState extends State<AddRestaurantForm> {
   final TextEditingController menuInfoController = TextEditingController();
   final TextEditingController imageUrlController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+    final CookieRequest request = CookieRequest();
+    apiService = ApiService(request);
+  }
+
   Future<void> submitForm() async {
-    // Validate the form
     if (!_formKey.currentState!.validate()) {
       return;
     }
 
-    // API URL
-    const String apiUrl = "http://localhost:8000/admin_role/create_resto_api/";
-
-    // Data to send to the API
     final Map<String, dynamic> requestData = {
       "name": nameController.text,
       "street_address": streetAddressController.text,
@@ -44,32 +47,14 @@ class _AddRestaurantFormState extends State<AddRestaurantForm> {
     };
 
     try {
-      // Send POST request
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: jsonEncode(requestData),
+      final response = await apiService.createRestaurant(requestData);
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response['message'] ?? 'Restaurant created successfully!')),
       );
 
-      if (response.statusCode == 200) {
-        // Success response
-        final responseData = jsonDecode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseData['message'])),
-        );
-        // Clear the form after successful submission
-        _formKey.currentState!.reset();
-      } else {
-        // Error response
-        final responseData = jsonDecode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Error: ${responseData['errors'] ?? 'Failed to create restaurant'}")),
-        );
-      }
+      _formKey.currentState!.reset(); // Clear the form
     } catch (e) {
-      // Handle connection or server error
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text("Error: $e")),
       );

@@ -8,6 +8,7 @@ import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:provider/provider.dart';
 
 import '../add_edit_resto/screens/add_resto.dart';
+import '../restaurant/services/api_service.dart';
 
 class ItemHomepage {
   final String name;
@@ -24,6 +25,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late ApiService apiService;
   final String npm = '5000000000'; // NPM
   final String name = 'Gedagedi Gedagedago'; // Name
   final String className = 'PBP S'; // Class
@@ -168,6 +170,14 @@ class _MyHomePageState extends State<MyHomePage> {
 
     // Fallback for no matches
     return 'Sorry, I couldn\'t find an answer for that. Please contact support.';
+  }
+
+  //Initialize the api service so u can delete the restos
+  @override
+  void initState() {
+    super.initState();
+    final request = context.read<CookieRequest>();
+    apiService = ApiService(request);
   }
 
   @override
@@ -346,6 +356,7 @@ class _MyHomePageState extends State<MyHomePage> {
                             //be reusable
                             return FoodCard(
                               food: food,
+                              apiService: apiService,
                             );
                           },
                         );

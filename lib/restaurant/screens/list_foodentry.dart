@@ -58,6 +58,7 @@ class _FoodEntryPageState extends State<FoodEntryPage> {
                 final food = snapshot.data[index];
                 return FoodCard(
                   food: food,
+                  apiService: apiService,
                 );
               },
             );
@@ -68,33 +69,23 @@ class _FoodEntryPageState extends State<FoodEntryPage> {
   }
 }
 
-//the food card widget (reusable)
 class FoodCard extends StatelessWidget {
   const FoodCard({
     super.key,
     required this.food,
+    required this.apiService,
   });
 
   final dynamic food;
+  final ApiService apiService;
 
-  //function for deleting restaurants 
-  Future<void> deleteRestaurant(BuildContext context) async {
-    final url = Uri.parse('http://localhost:8000/admin_role/delete_resto_api/${food.pk}/');
-
+  // Function to delete the restaurant
+  Future<void> _deleteRestaurant(BuildContext context) async {
     try {
-      final response = await http.delete(url);
-
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(data['message'])),
-        );
-      } else {
-        final data = jsonDecode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${data['message']}')),
-        );
-      }
+      final response = await apiService.deleteRestaurant(food.pk);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response)),
+      );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to delete restaurant: $e')),
@@ -102,7 +93,6 @@ class FoodCard extends StatelessWidget {
     }
   }
 
-  //the actual front end
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -121,7 +111,6 @@ class FoodCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          // Main InkWell for navigating to details
           InkWell(
             onTap: () {
               Navigator.push(
@@ -172,13 +161,11 @@ class FoodCard extends StatelessWidget {
               ),
             ),
           ),
-          // Edit and Delete buttons
           Positioned(
             top: 8,
             right: 8,
             child: Row(
               children: [
-                // Edit Icon
                 IconButton(
                   icon: const Icon(Icons.edit, color: Colors.blue),
                   tooltip: 'Edit Restaurant',
@@ -191,12 +178,11 @@ class FoodCard extends StatelessWidget {
                     );
                   },
                 ),
-                // Delete Icon
                 IconButton(
                   icon: const Icon(Icons.delete, color: Colors.red),
                   tooltip: 'Delete Restaurant',
                   onPressed: () async {
-                    await deleteRestaurant(context);
+                    await _deleteRestaurant(context);
                   },
                 ),
               ],

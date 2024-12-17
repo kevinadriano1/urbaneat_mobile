@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'dart:convert'; 
-import 'package:http/http.dart' as http;
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:urbaneat/restaurant/services/api_service.dart';
 
 class EditRestaurantForm extends StatefulWidget {
   final String id; // Restaurant ID to be edited
@@ -12,6 +12,7 @@ class EditRestaurantForm extends StatefulWidget {
 
 class _EditRestaurantFormState extends State<EditRestaurantForm> {
   final _formKey = GlobalKey<FormState>();
+  late ApiService apiService;
 
   // Controllers for the input fields
   final TextEditingController nameController = TextEditingController();
@@ -27,34 +28,27 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
   @override
   void initState() {
     super.initState();
+    apiService = ApiService(CookieRequest()); // Initialize ApiService
     fetchRestaurantDetails(); // Load existing restaurant data
   }
 
   Future<void> fetchRestaurantDetails() async {
-    final apiUrl = 'http://localhost:8000/admin_role/edit_resto_api/${widget.id}/'; // Example API endpoint
     try {
-      final response = await http.get(Uri.parse(apiUrl));
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
-        setState(() {
-          nameController.text = data['name'];
-          streetAddressController.text = data['street_address'];
-          locationController.text = data['location'];
-          foodTypeController.text = data['food_type'];
-          descriptionController.text = data['comments'];
-          contactNumberController.text = data['contact_number'];
-          restaurantUrlController.text = data['trip_advisor_url'];
-          menuInfoController.text = data['menu_info'];
-          imageUrlController.text = data['image_url'];
-        });
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to fetch restaurant details.')),
-        );
-      }
+      final data = await apiService.getEditRestaurantDetails(widget.id);
+      setState(() {
+        nameController.text = data['name'];
+        streetAddressController.text = data['street_address'];
+        locationController.text = data['location'];
+        foodTypeController.text = data['food_type'];
+        descriptionController.text = data['comments'];
+        contactNumberController.text = data['contact_number'];
+        restaurantUrlController.text = data['trip_advisor_url'];
+        menuInfoController.text = data['menu_info'];
+        imageUrlController.text = data['image_url'];
+      });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error fetching data: $e')),
+        SnackBar(content: Text('Error: $e')),
       );
     }
   }
@@ -62,7 +56,6 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
   Future<void> submitForm() async {
     if (!_formKey.currentState!.validate()) return;
 
-    final apiUrl = 'http://localhost:8000/admin_role/edit_resto_api/${widget.id}/';
     final Map<String, dynamic> requestData = {
       'name': nameController.text,
       'street_address': streetAddressController.text,
@@ -76,24 +69,10 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
     };
 
     try {
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {"Content-Type": "application/json"},
-        body: jsonEncode(requestData),
+      final response = await apiService.updateRestaurant(widget.id, requestData);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(response['message'] ?? 'Restaurant updated successfully!')),
       );
-
-      final xxx= response.body;
-      if (response.statusCode == 200) {
-        final responseData = jsonDecode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(responseData['message'])),
-        );
-      } else {
-        final responseData = jsonDecode(response.body);
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: ${responseData['error']}')),
-        );
-      }
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error: $e')),
