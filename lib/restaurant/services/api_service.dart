@@ -4,10 +4,8 @@ import 'package:urbaneat/restaurant/models/food_entry.dart';
 
 class ApiService {
   final CookieRequest request;
-  final String _baseUrl = 
-  //'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id'
-  'http://localhost:8000'
-  ;
+  //final String _baseUrl = 'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id';
+  final String _baseUrl = 'http://localhost:8000';
   
 
   ApiService(this.request);
