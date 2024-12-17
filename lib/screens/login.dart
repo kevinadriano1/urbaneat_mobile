@@ -3,6 +3,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'package:urbaneat/screens/register.dart';
 import 'package:urbaneat/screens/menu.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Import shared_preferences
 
 void main() {
   runApp(const LoginApp());
@@ -36,7 +37,10 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-
+  Future<void> _storeUserRole(String role) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('userRole', role); // Store user role in SharedPreferences
+  }
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
@@ -136,6 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                             String message = response['message'];
                             String uname = response['username'];
                             String? urole = response['user_role']; //userrole not yet deployed to pws so rn this will cause null
+                            await _storeUserRole(urole ?? 'None'); 
                             if (context.mounted) {
                               Navigator.pushReplacement(
                                 context,
