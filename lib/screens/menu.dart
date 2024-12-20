@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:urbaneat/widgets/left_drawer.dart';
 import 'package:urbaneat/restaurant/screens/list_foodentry.dart';
-import 'package:urbaneat/screens/moodentry_form.dart';
 import 'package:urbaneat/restaurant/models/food_entry.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
-import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:provider/provider.dart';
 
 import '../add_edit_resto/screens/add_resto.dart';

@@ -6,8 +6,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:urbaneat/widgets/left_drawer.dart';
 import 'package:provider/provider.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
 
 class FoodEntryPage extends StatefulWidget {
   const FoodEntryPage({super.key});
