@@ -15,10 +15,7 @@ dependencies:
   http: ^1.2.2
   flutter_native_splash: ^2.4.3
   shared_preferences: ^2.3.3
-<<<<<<< HEAD
-=======
   image_picker: ^0.8.7+5
->>>>>>> 49ac242 (profile)
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
