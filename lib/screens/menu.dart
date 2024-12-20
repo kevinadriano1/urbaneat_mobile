@@ -4,10 +4,20 @@ import 'package:urbaneat/restaurant/screens/list_foodentry.dart';
 import 'package:urbaneat/restaurant/models/food_entry.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+<<<<<<< HEAD
+=======
+import 'dart:io';
+
+>>>>>>> 49ac242 (profile)
 
 import '../add_edit_resto/screens/add_resto.dart';
 import '../add_edit_resto/services/user_role_service.dart';
 import '../restaurant/services/api_service.dart';
+<<<<<<< HEAD
+=======
+import 'package:urbaneat/user_roles/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+>>>>>>> 49ac242 (profile)
 
 class ItemHomepage {
   final String name;
@@ -24,6 +34,10 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+<<<<<<< HEAD
+=======
+  String _profilePictureUrl = '';
+>>>>>>> 49ac242 (profile)
   late ApiService apiService;
   final String npm = '5000000000'; // NPM
   final String name = 'Gedagedi Gedagedago'; // Name
@@ -175,10 +189,28 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+<<<<<<< HEAD
+=======
+    _loadProfilePicture();
+>>>>>>> 49ac242 (profile)
     final request = context.read<CookieRequest>();
     apiService = ApiService(request);
   }
 
+<<<<<<< HEAD
+=======
+  Future<void> _loadProfilePicture() async {
+  try {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _profilePictureUrl = prefs.getString('profilePictureUrl') ?? '';
+    });
+  } catch (e) {
+    debugPrint('Error loading profile picture: $e');
+  }
+}
+
+>>>>>>> 49ac242 (profile)
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
@@ -204,6 +236,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+<<<<<<< HEAD
                   const Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -234,6 +267,53 @@ class _MyHomePageState extends State<MyHomePage> {
                       ),
                     ],
                   ),
+=======
+                  Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text(
+          'Hi, Paul',
+          style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 4.0),
+        Text(
+          'Where to go?',
+          style: TextStyle(
+            fontSize: 16.0,
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    ),
+    GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UserRoles(),
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 24.0,
+                      backgroundImage: _profilePictureUrl.isNotEmpty
+                          ? FileImage(File(_profilePictureUrl))
+                          : const AssetImage('assets/images/default-profile.jpg')
+                              as ImageProvider,
+                      child: _profilePictureUrl.isEmpty
+                          ? const Icon(Icons.person, size: 24.0, color: Colors.white)
+                          : null,
+                    ),
+                  ),
+  ],
+),
+>>>>>>> 49ac242 (profile)
                   const SizedBox(height: 16.0),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),

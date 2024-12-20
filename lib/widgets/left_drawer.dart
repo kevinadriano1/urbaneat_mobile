@@ -5,6 +5,10 @@ import '../add_edit_resto/services/user_role_service.dart';
 import 'package:urbaneat/leaderboards/leaderboard_page.dart';
 import 'package:urbaneat/leaderboards/recommendations_page.dart';
 import '../add_edit_resto/screens/add_resto.dart';
+<<<<<<< HEAD
+=======
+import 'package:urbaneat/user_roles/profile.dart';
+>>>>>>> 49ac242 (profile)
 
 class LeftDrawer extends StatefulWidget {
   const LeftDrawer({super.key});
@@ -125,6 +129,21 @@ class _LeftDrawerState extends State<LeftDrawer> {
               );
             },
           ),
+<<<<<<< HEAD
+=======
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Profile'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserRoles(),
+                ),
+              );
+            },
+          ),
+>>>>>>> 49ac242 (profile)
         ],
       ),
     );

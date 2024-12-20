@@ -3,6 +3,10 @@ import 'package:provider/provider.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'onboarding/onboarding.dart'; // Ensure correct path
+<<<<<<< HEAD
+=======
+import 'screens/menu.dart';
+>>>>>>> 49ac242 (profile)
 
 void main() {
   runApp(const MyApp());
@@ -26,7 +30,11 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
         ),
         debugShowCheckedModeBanner: false,
+<<<<<<< HEAD
         home: OnBoardingScreen(),
+=======
+        home: MyHomePage(),
+>>>>>>> 49ac242 (profile)
       ),
     );
   }
