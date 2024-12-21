@@ -4,10 +4,14 @@ import 'package:urbaneat/restaurant/screens/list_foodentry.dart';
 import 'package:urbaneat/restaurant/models/food_entry.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
+import 'dart:io';
+
 
 import '../add_edit_resto/screens/add_resto.dart';
 import '../add_edit_resto/services/user_role_service.dart';
 import '../restaurant/services/api_service.dart';
+import 'package:urbaneat/user_roles/profile.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ItemHomepage {
   final String name;
@@ -24,6 +28,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String _profilePictureUrl = '';
   late ApiService apiService;
   final String npm = '5000000000'; // NPM
   final String name = 'Gedagedi Gedagedago'; // Name
@@ -175,9 +180,21 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    _loadProfilePicture();
     final request = context.read<CookieRequest>();
     apiService = ApiService(request);
   }
+
+  Future<void> _loadProfilePicture() async {
+  try {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    setState(() {
+      _profilePictureUrl = prefs.getString('profilePictureUrl') ?? '';
+    });
+  } catch (e) {
+    debugPrint('Error loading profile picture: $e');
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -204,36 +221,51 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Hi, Paul',
-                            style: TextStyle(
-                              fontSize: 24.0,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          SizedBox(height: 4.0),
-                          Text(
-                            'Where to go?',
-                            style: TextStyle(
-                              fontSize: 16.0,
-                              color: Colors.grey,
-                            ),
-                          ),
-                        ],
-                      ),
-                      CircleAvatar(
-                        radius: 24.0,
-                        backgroundImage: AssetImage(
-                            'assets/profile_pic.jpg'), // Replace with your image
-                      ),
-                    ],
+                  Row(
+  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  children: [
+    Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: const [
+        Text(
+          'Hi, Paul',
+          style: TextStyle(
+            fontSize: 24.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        SizedBox(height: 4.0),
+        Text(
+          'Where to go?',
+          style: TextStyle(
+            fontSize: 16.0,
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    ),
+    GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const UserRoles(),
+                        ),
+                      );
+                    },
+                    child: CircleAvatar(
+                      radius: 24.0,
+                      backgroundImage: _profilePictureUrl.isNotEmpty
+                          ? FileImage(File(_profilePictureUrl))
+                          : const AssetImage('assets/images/default-profile.jpg')
+                              as ImageProvider,
+                      child: _profilePictureUrl.isEmpty
+                          ? const Icon(Icons.person, size: 24.0, color: Colors.white)
+                          : null,
+                    ),
                   ),
+  ],
+),
                   const SizedBox(height: 16.0),
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),

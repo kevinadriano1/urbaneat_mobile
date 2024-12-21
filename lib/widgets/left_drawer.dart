@@ -5,6 +5,7 @@ import '../add_edit_resto/services/user_role_service.dart';
 import 'package:urbaneat/leaderboards/leaderboard_page.dart';
 import 'package:urbaneat/leaderboards/recommendations_page.dart';
 import '../add_edit_resto/screens/add_resto.dart';
+import 'package:urbaneat/user_roles/profile.dart';
 
 class LeftDrawer extends StatefulWidget {
   const LeftDrawer({super.key});
@@ -121,6 +122,18 @@ class _LeftDrawerState extends State<LeftDrawer> {
                 context,
                 MaterialPageRoute(
                   builder: (context) => const RecommendationsPage(),
+                ),
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Profile'),
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => UserRoles(),
                 ),
               );
             },

@@ -4,6 +4,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'onboarding/onboarding.dart'; // Ensure correct path
 
+
 void main() {
   runApp(const MyApp());
 }
