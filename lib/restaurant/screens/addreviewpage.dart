@@ -30,109 +30,152 @@ class _AddReviewPageState extends State<AddReviewPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add Review'),
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Colors.white,
       ),
-      body: Form(
-        key: _formKey,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Comment",
-                    labelText: "Comment",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Text(
+                "Add Your Review",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 16),
+              Container(
+                padding: const EdgeInsets.all(16.0),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(8.0),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.grey.withOpacity(0.3),
+                      spreadRadius: 2,
+                      blurRadius: 5,
+                      offset: const Offset(0, 3),
                     ),
-                  ),
-                  maxLines: 3,
-                  onChanged: (value) {
-                    setState(() {
-                      _comment = value;
-                    });
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return "Comment cannot be empty!";
-                    }
-                    return null;
-                  },
+                  ],
                 ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  decoration: InputDecoration(
-                    hintText: "Rating (0.0 - 5.0)",
-                    labelText: "Rating",
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(5.0),
-                    ),
-                  ),
-                  keyboardType: TextInputType.number,
-                  onChanged: (value) {
-                    setState(() {
-                      _rating = double.tryParse(value) ?? 0.0;
-                    });
-                  },
-                  validator: (value) {
-                    final rating = double.tryParse(value ?? '');
-                    if (value == null || value.isEmpty) {
-                      return "Rating cannot be empty!";
-                    }
-                    if (rating == null || rating < 0.0 || rating > 5.0) {
-                      return "Please enter a valid rating between 0.0 and 5.0.";
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.all(
-                        Theme.of(context).colorScheme.primary),
-                  ),
-                  onPressed: () async {
-                    if (_formKey.currentState!.validate()) {
-                      try {
-                        final response = await apiService.addReview(
-                            widget.restaurantId, _rating, _comment);
-
-                        if (context.mounted) {
-                          if (response['success'] == true) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text("Review added successfully!"),
-                              ),
-                            );
-                            Navigator.pop(context, true); // Notify success
-                          } else {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                    "Failed to add review: ${response['errors'] ?? 'Unknown error.'}"),
-                              ),
-                            );
-                          }
-                        }
-                      } catch (e) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text("An error occurred: $e"),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Comment",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Write your comment...",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
                           ),
-                        );
-                      }
-                    }
-                  },
-                  child: const Text(
-                    "Submit Review",
-                    style: TextStyle(color: Colors.white),
+                        ),
+                        maxLines: 3,
+                        onChanged: (value) {
+                          setState(() {
+                            _comment = value;
+                          });
+                        },
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return "Comment cannot be empty!";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      const Text(
+                        "Rating",
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      TextFormField(
+                        decoration: InputDecoration(
+                          hintText: "Enter a rating between 0.0 and 5.0",
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(5.0),
+                          ),
+                        ),
+                        keyboardType: TextInputType.number,
+                        onChanged: (value) {
+                          setState(() {
+                            _rating = double.tryParse(value) ?? 0.0;
+                          });
+                        },
+                        validator: (value) {
+                          final rating = double.tryParse(value ?? '');
+                          if (value == null || value.isEmpty) {
+                            return "Rating cannot be empty!";
+                          }
+                          if (rating == null || rating < 0.0 || rating > 5.0) {
+                            return "Please enter a valid rating between 0.0 and 5.0.";
+                          }
+                          return null;
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      Center(
+                        child: ElevatedButton(
+                          onPressed: () async {
+                            if (_formKey.currentState!.validate()) {
+                              try {
+                                final response = await apiService.addReview(
+                                    widget.restaurantId, _rating, _comment);
+
+                                if (context.mounted) {
+                                  if (response['success'] == true) {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text("Review added successfully!"),
+                                      ),
+                                    );
+                                    Navigator.pop(context, true); // Notify success
+                                  } else {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(
+                                            "Failed to add review: ${response['errors'] ?? 'Unknown error.'}"),
+                                      ),
+                                    );
+                                  }
+                                }
+                              } catch (e) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text("An error occurred: $e"),
+                                  ),
+                                );
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 24, vertical: 12),
+                          ),
+                          child: const Text(
+                            "Submit Review",
+                            style: TextStyle(color: Colors.white, fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),

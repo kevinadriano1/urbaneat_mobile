@@ -151,9 +151,10 @@ class _FoodCardState extends State<FoodCard> {
                   Text(
                     widget.food.fields.name,
                     style: const TextStyle(
-                      fontSize: 18.0,
+                      fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
+                    
                   ),
                   const SizedBox(height: 8),
                   Text("Address: ${widget.food.fields.streetAddress}"),

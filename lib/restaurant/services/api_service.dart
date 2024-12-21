@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:urbaneat/restaurant/models/food_entry.dart';
+import 'package:urbaneat/env.dart';
 
 class ApiService {
   final CookieRequest request;
   //final String _baseUrl = 'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id';
-  final String _baseUrl = 'http://localhost:8000';
+  final String _baseUrl = Env.backendUrl;
+
 
   ApiService(this.request);
 

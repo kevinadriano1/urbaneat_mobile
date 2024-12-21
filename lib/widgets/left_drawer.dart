@@ -90,7 +90,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
             ),
           ListTile(
             leading: const Icon(Icons.add_reaction_rounded),
-            title: const Text('Mood List'),
+            title: const Text('Restaurant List'),
             onTap: () {
               Navigator.push(
                 context,
