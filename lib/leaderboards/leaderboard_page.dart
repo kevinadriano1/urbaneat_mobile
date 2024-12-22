@@ -52,11 +52,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
     for (int i = 0; i < 5; i++) {
       if (i < fullStars) {
-        stars.add(const Icon(Icons.star, color: Colors.amber, size: 20));
+        stars.add(const Icon(Icons.star, color: Colors.grey, size: 20));
       } else if (i == fullStars && hasHalfStar) {
-        stars.add(const Icon(Icons.star_half, color: Colors.amber, size: 20));
+        stars.add(const Icon(Icons.star_half, color: Colors.grey, size: 20));
       } else {
-        stars.add(const Icon(Icons.star_border, color: Colors.amber, size: 20));
+        stars.add(const Icon(Icons.star_border, color: Colors.grey, size: 20));
       }
     }
 
@@ -68,17 +68,17 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Define custom TextStyles
+    // Define custom TextStyles with monochrome colors
     const titleStyle = TextStyle(
       fontSize: 20,
       fontWeight: FontWeight.bold,
-      color: Colors.black87,
+      color: Colors.black,
     );
 
     const subtitleStyle = TextStyle(
       fontSize: 16,
       fontWeight: FontWeight.w600,
-      color: Colors.black54,
+      color: Colors.grey,
     );
 
     const bodyStyle = TextStyle(
@@ -90,7 +90,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       appBar: AppBar(
         title: const Text('Leaderboard'),
         centerTitle: true,
-        backgroundColor: Colors.blueGrey,
+        backgroundColor: Colors.black, // Changed to black
+        iconTheme: const IconThemeData(color: Colors.white), // Icon color white
+        titleTextStyle: const TextStyle(
+          color: Colors.white, // Title text color white
+          fontSize: 20,
+          fontWeight: FontWeight.bold,
+        ),
       ),
       body: RefreshIndicator(
         onRefresh: fetchLeaderboardData,
@@ -102,7 +108,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                       padding: const EdgeInsets.all(16.0),
                       child: Text(
                         errorMessage!,
-                        style: TextStyle(
+                        style: const TextStyle(
                           color: Colors.red,
                           fontSize: 16,
                         ),
@@ -114,7 +120,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     ? const Center(
                         child: Text(
                           'No data available.',
-                          style: TextStyle(fontSize: 18),
+                          style: TextStyle(fontSize: 18, color: Colors.black),
                         ),
                       )
                     : ListView.builder(
@@ -126,14 +132,16 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           return Padding(
                             padding: const EdgeInsets.symmetric(vertical: 4.0),
                             child: Card(
+                              color: Colors.white, // Card background white
                               elevation: 4,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
+                                side: BorderSide(color: Colors.grey.shade300),
                               ),
                               child: ExpansionTile(
-                                leading: Icon(
+                                leading: const Icon(
                                   Icons.restaurant,
-                                  color: Colors.blueGrey,
+                                  color: Colors.black, // Icon color black
                                   size: 30,
                                 ),
                                 title: Text(
@@ -151,32 +159,29 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                   }
 
                                   // Retrieve restaurantId
-                                  // Adjust the key based on your data structure
                                   String restaurantId = '';
                                   if (restaurant.containsKey('id')) {
                                     restaurantId = restaurant['id'].toString();
                                   } else if (restaurant.containsKey('restaurant_id')) {
                                     restaurantId = restaurant['restaurant_id'].toString();
-                                  } else {
-                                    // Handle cases where the ID field is missing
-                                    // You can choose to skip this restaurant or assign a default value
-                                    // For this example, we'll skip navigation if ID is missing
                                   }
 
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16.0, vertical: 8.0),
                                     child: Card(
+                                      color: Colors.grey.shade100, // Light gray background
                                       elevation: 2,
                                       shape: RoundedRectangleBorder(
                                         borderRadius: BorderRadius.circular(8),
+                                        side: BorderSide(color: Colors.grey.shade300),
                                       ),
                                       child: ListTile(
                                         leading: CircleAvatar(
-                                          backgroundColor: Colors.blueGrey.shade100,
-                                          child: Icon(
+                                          backgroundColor: Colors.grey.shade300,
+                                          child: const Icon(
                                             Icons.location_city,
-                                            color: Colors.blueGrey,
+                                            color: Colors.black,
                                           ),
                                         ),
                                         title: InkWell(
@@ -199,8 +204,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                             restaurant['name'],
                                             style: subtitleStyle.copyWith(
                                               color: restaurantId.isNotEmpty
-                                                  ? Colors.blue
-                                                  : Colors.black54,
+                                                  ? Colors.black
+                                                  : Colors.grey,
                                               decoration: restaurantId.isNotEmpty
                                                   ? TextDecoration.underline
                                                   : TextDecoration.none,
@@ -227,7 +232,6 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                             ),
                                           ],
                                         ),
-                                        // Removed the trailing star icon as it's now redundant
                                         isThreeLine: true,
                                       ),
                                     ),
@@ -242,8 +246,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       floatingActionButton: FloatingActionButton(
         onPressed: fetchLeaderboardData,
         tooltip: 'Refresh',
-        backgroundColor: Colors.blueGrey,
-        child: const Icon(Icons.refresh),
+        backgroundColor: Colors.black, // Changed to black
+        child: const Icon(Icons.refresh, color: Colors.white), // Icon color white
       ),
     );
   }

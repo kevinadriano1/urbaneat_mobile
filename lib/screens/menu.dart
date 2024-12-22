@@ -1,3 +1,5 @@
+// menu.dart
+
 import 'package:flutter/material.dart';
 import 'package:urbaneat/widgets/left_drawer.dart';
 import 'package:urbaneat/restaurant/screens/list_foodentry.dart';
@@ -27,6 +29,7 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   String _profilePictureUrl = '';
+  String _username = 'UrbanEater'; // Default username
   late ApiService apiService;
   final String npm = '5000000000'; // NPM
   final String name = 'Gedagedi Gedagedago'; // Name
@@ -47,7 +50,6 @@ class _MyHomePageState extends State<MyHomePage> {
     "Chinese",
     "Japanese",
     "Mexican",
-    "American",
     "Indian",
     "Thai",
     "French",
@@ -173,25 +175,27 @@ class _MyHomePageState extends State<MyHomePage> {
     return 'Sorry, I couldn\'t find an answer for that. Please contact support.';
   }
 
-  //Initialize the api service so u can delete the restos
+  // Initialize the API service and load user data
   @override
   void initState() {
     super.initState();
-    _loadProfilePicture();
+    _loadUserData();
     final request = context.read<CookieRequest>();
     apiService = ApiService(request);
   }
 
-  Future<void> _loadProfilePicture() async {
-  try {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    setState(() {
-      _profilePictureUrl = prefs.getString('profilePictureUrl') ?? '';
-    });
-  } catch (e) {
-    debugPrint('Error loading profile picture: $e');
+  // Method to load user data from SharedPreferences
+  Future<void> _loadUserData() async {
+    try {
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      setState(() {
+        _profilePictureUrl = prefs.getString('profilePictureUrl') ?? '';
+        _username = prefs.getString('username') ?? 'UrbanEater'; // Fetch username
+      });
+    } catch (e) {
+      debugPrint('Error loading user data: $e');
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {
@@ -201,9 +205,9 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
         title: Image.asset(
-                          'assets/icons/white_urbaneat_thicc.png',
-                          height: 40,
-                        ),
+          'assets/icons/white_urbaneat_thicc.png',
+          height: 40,
+        ),
         backgroundColor: Colors.black,
       ),
       drawer: const LeftDrawer(),
@@ -215,52 +219,53 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Welcome Section
                   Row(
-  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-  children: [
-    Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
-        Text(
-          'Welcome, UrbanEater.',
-          style: TextStyle(
-            fontSize: 24.0,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        SizedBox(height: 4.0),
-        Text(
-          'Where to go?',
-          style: TextStyle(
-            fontSize: 16.0,
-            color: Colors.grey,
-          ),
-        ),
-      ],
-    ),
-    GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const UserRoles(),
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Welcome, $_username.',
+                            style: const TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 4.0),
+                          const Text(
+                            'Where to go?',
+                            style: TextStyle(
+                              fontSize: 16.0,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const UserRoles(),
+                            ),
+                          );
+                        },
+                        child: CircleAvatar(
+                          radius: 24.0,
+                          backgroundImage: _profilePictureUrl.isNotEmpty
+                              ? FileImage(File(_profilePictureUrl))
+                              : const AssetImage('assets/images/default-profile.jpg') as ImageProvider,
+                          child: _profilePictureUrl.isEmpty
+                              ? const Icon(Icons.person, size: 24.0, color: Colors.white)
+                              : null,
                         ),
-                      );
-                    },
-                    child: CircleAvatar(
-                      radius: 24.0,
-                      backgroundImage: _profilePictureUrl.isNotEmpty
-                          ? FileImage(File(_profilePictureUrl))
-                          : const AssetImage('assets/images/default-profile.jpg')
-                              as ImageProvider,
-                      child: _profilePictureUrl.isEmpty
-                          ? const Icon(Icons.person, size: 24.0, color: Colors.white)
-                          : null,
-                    ),
+                      ),
+                    ],
                   ),
-  ],
-),
                   const SizedBox(height: 16.0),
+                  // Search Bar
                   Container(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
                     decoration: BoxDecoration(
@@ -280,6 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
+                  // Filter Button
                   ElevatedButton(
                     onPressed: () {
                       showModalBottomSheet(
@@ -304,8 +310,8 @@ class _MyHomePageState extends State<MyHomePage> {
                       );
                     },
                     style: ElevatedButton.styleFrom(
-                          backgroundColor: Theme.of(context).colorScheme.tertiary, 
-                        ),
+                      backgroundColor: Theme.of(context).colorScheme.tertiary, 
+                    ),
                     child: Text(
                       "Filter",
                       style: TextStyle(
@@ -314,9 +320,11 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
+                  // Carousel Widget
                   const CarouselExample(),
                   const SizedBox(height: 16.0),
                   /*
+                  // Leaderboard Section (Commented Out)
                   const Text(
                     'Top 3 on Leaderboards',
                     style: TextStyle(
@@ -338,7 +346,9 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 16.0),*/
+                  const SizedBox(height: 16.0),
+                  */
+                  // All Restaurants Section
                   const Text(
                     'All Restaurants',
                     style: TextStyle(
@@ -388,8 +398,7 @@ class _MyHomePageState extends State<MyHomePage> {
                           itemCount: filteredData.length,
                           itemBuilder: (_, index) {
                             final food = filteredData[index];
-            
-            
+
                             return FoodCard(
                               food: food,
                               apiService: apiService,
@@ -402,6 +411,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 ],
               ),
             ),
+            // Chatbot FloatingActionButton
             Positioned(
               bottom: 16,
               right: 16,
@@ -473,11 +483,10 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  // Method to fetch food entries from the API
   Future<List<FoodEntry>> fetchFoodEntries(CookieRequest request) async {
-    final response = await request
-        .get(
-          'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/json/'
-          );
+    final response = await request.get(
+        'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/json/');
     var data = response;
 
     List<FoodEntry> listFood = [];
@@ -490,6 +499,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
+// Reusable Widget for Filter Chips (if needed)
 class FilterChipWidget extends StatelessWidget {
   final String label;
 

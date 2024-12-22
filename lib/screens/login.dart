@@ -37,10 +37,19 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  // Method to store user role
   Future<void> _storeUserRole(String role) async {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('userRole', role); // Store user role in SharedPreferences
   }
+
+  // **New Method to Store Username**
+  Future<void> _storeUsername(String username) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', username); // Store username in SharedPreferences
+  }
+
   @override
   Widget build(BuildContext context) {
     final request = context.watch<CookieRequest>();
@@ -128,29 +137,35 @@ class _LoginPageState extends State<LoginPage> {
 
                           // Check credentials
                           final response = await request.login(
-                            //untag this for production
+                            // Uncomment the production URL and comment out the localhost URL when deploying
                             'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/auth/login_flutter/',
                             //"http://localhost:8000/auth/login_flutter/", 
                             {
-                            'username': username,
-                            'password': password,
-                          });
+                              'username': username,
+                              'password': password,
+                            }
+                          );
 
                           if (request.loggedIn) {
                             String message = response['message'];
                             String uname = response['username'];
-                            String? urole = response['user_role']; //userrole not yet deployed to pws so rn this will cause null
+                            String? urole = response['user_role']; // user_role might be null if not deployed
+
+                            // Store user role and username
                             await _storeUserRole(urole ?? 'None'); 
+                            await _storeUsername(uname); // Store the username
+
                             if (context.mounted) {
                               Navigator.pushReplacement(
                                 context,
-                                MaterialPageRoute(builder: (context) => MyHomePage()),
+                                MaterialPageRoute(builder: (context) => const MyHomePage()),
                               );
                               ScaffoldMessenger.of(context)
                                 ..hideCurrentSnackBar()
                                 ..showSnackBar(
                                   SnackBar(
-                                      content: Text("$message Welcome, $uname. Your role is $urole.")),
+                                    content: Text("$message Welcome, $uname. Your role is $urole.")
+                                  ),
                                 );
                             }
                           } else {
