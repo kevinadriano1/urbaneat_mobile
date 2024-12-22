@@ -3,18 +3,17 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:urbaneat/restaurant/services/api_service.dart';
 
 class EditRestaurantForm extends StatefulWidget {
-  final String id; 
-  const EditRestaurantForm({required this.id});
+  final String id;
+  const EditRestaurantForm({super.key, required this.id});
 
   @override
-  _EditRestaurantFormState createState() => _EditRestaurantFormState();
+  EditRestaurantFormState createState() => EditRestaurantFormState();
 }
 
-class _EditRestaurantFormState extends State<EditRestaurantForm> {
+class EditRestaurantFormState extends State<EditRestaurantForm> {
   final _formKey = GlobalKey<FormState>();
   late ApiService apiService;
 
-  // Controllers for the input fields
   final TextEditingController nameController = TextEditingController();
   final TextEditingController streetAddressController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
@@ -28,7 +27,7 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
   @override
   void initState() {
     super.initState();
-    apiService = ApiService(CookieRequest()); 
+    apiService = ApiService(CookieRequest());
     fetchRestaurantDetails(); // load existing restaurant data
   }
 
@@ -69,9 +68,12 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
     };
 
     try {
-      final response = await apiService.updateRestaurant(widget.id, requestData);
+      final response =
+          await apiService.updateRestaurant(widget.id, requestData);
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(response['message'] ?? 'Restaurant updated successfully!')),
+        SnackBar(
+            content: Text(
+                response['message'] ?? 'Restaurant updated successfully!')),
       );
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -87,16 +89,20 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
         headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
           return [
             SliverAppBar(
-              expandedHeight: MediaQuery.of(context).size.height * 0.33, 
+              expandedHeight: MediaQuery.of(context).size.height * 0.33,
               pinned: false,
               flexibleSpace: FlexibleSpaceBar(
-                background: Image.network(
-                  imageUrlController.text.isNotEmpty
-                      ? imageUrlController.text
-                      : 'https://via.placeholder.com/150', 
-                  fit: BoxFit.cover,
-                ),
-              ),
+                  background: Image.network(
+                imageUrlController
+                    .text, 
+                fit: BoxFit.cover,
+                errorBuilder: (context, error, stackTrace) {
+                  return Image.asset(
+                    'assets/images/placeholder.png', 
+                    fit: BoxFit.cover,
+                  );
+                },
+              )),
             ),
           ];
         },
@@ -119,7 +125,8 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
                   buildInputField('Street Address', streetAddressController),
                   buildInputField('Location', locationController),
                   buildInputField('Food Type', foodTypeController),
-                  buildInputField('Description', descriptionController, maxLines: 3),
+                  buildInputField('Description', descriptionController,
+                      maxLines: 3),
                   buildInputField('Contact Number', contactNumberController),
                   buildInputField('Restaurant URL', restaurantUrlController),
                   buildInputField('Menu Info', menuInfoController, maxLines: 3),
@@ -130,11 +137,15 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
                       onPressed: submitForm,
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.black,
-                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 50, vertical: 15),
                       ),
                       child: const Text(
                         'Save',
-                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
@@ -147,7 +158,8 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
     );
   }
 
-  Widget buildInputField(String label, TextEditingController controller, {int maxLines = 1}) {
+  Widget buildInputField(String label, TextEditingController controller,
+      {int maxLines = 1}) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 12.0),
       child: Column(
@@ -166,7 +178,8 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
             controller: controller,
             maxLines: maxLines,
             decoration: InputDecoration(
-              contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
+              contentPadding:
+                  const EdgeInsets.symmetric(vertical: 10, horizontal: 15),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(8.0),
               ),

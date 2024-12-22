@@ -43,7 +43,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
             child: Column(
               children: [
                 Text(
-                  'URBANEATS',
+                  'UrbanEat',
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 24,
@@ -53,7 +53,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
                 ),
                 Padding(padding: EdgeInsets.all(8)),
                 Text(
-                  "Search The Most Scrumptious Restaurants Here!",
+                  "New York's Flavours in Your Pocket.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 15.0,
@@ -75,10 +75,9 @@ class _LeftDrawerState extends State<LeftDrawer> {
                   ));
             },
           ),
-          // Only show "Add Restaurant" if the user role is Restaurant_Manager
           if (_userRole == 'Restaurant_Manager')
             ListTile(
-              leading: const Icon(Icons.mood),
+              leading: const Icon(Icons.restaurant),
               title: const Text('Add Restaurant'),
               onTap: () {
                 Navigator.push(
@@ -90,7 +89,9 @@ class _LeftDrawerState extends State<LeftDrawer> {
               },
             ),
           ListTile(
-            leading: const Icon(Icons.add_reaction_rounded),
+            leading: const Icon(
+              Icons.view_list,
+            ),
             title: const Text('Restaurant List'),
             onTap: () {
               Navigator.push(
@@ -138,8 +139,9 @@ class _LeftDrawerState extends State<LeftDrawer> {
               );
             },
           ),
+          const Divider(),
           ListTile(
-            leading: const Icon(Icons.person),
+            leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Log out'),
             onTap: () {
               //put yer code here yur

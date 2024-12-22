@@ -88,8 +88,7 @@ class FoodCardState extends State<FoodCard> {
   Future<void> _fetchUserRole() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _userRole = prefs.getString('userRole') ??
-          'User'; 
+      _userRole = prefs.getString('userRole') ?? 'User';
     });
   }
 
@@ -132,176 +131,171 @@ class FoodCardState extends State<FoodCard> {
     }).toList();
   }
 
- @override
-Widget build(BuildContext context) {
-  return GestureDetector(
-    onTap: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => RestaurantDetailPage(
-            restaurantId: widget.food.pk,
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => RestaurantDetailPage(
+              restaurantId: widget.food.pk,
+            ),
           ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 2,
+              blurRadius: 5,
+              offset: const Offset(0, 3),
+            ),
+          ],
         ),
-      );
-    },
-    child: Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(8.0),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 2,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
-          ),
-        ],
-      ),
-      child: Stack(
-        children: [
-          IntrinsicHeight(
-            child: Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                // image on the left
-                Container(
-                  width: MediaQuery.of(context).size.width / 6,
-                  height: double.infinity,
-                  clipBehavior: Clip.hardEdge,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(8.0),
-                      bottomLeft: Radius.circular(8.0),
+        child: Stack(
+          children: [
+            IntrinsicHeight(
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  // image on the left
+                  Container(
+                    width: MediaQuery.of(context).size.width / 6,
+                    height: double.infinity,
+                    clipBehavior: Clip.hardEdge,
+                    decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8.0),
+                        bottomLeft: Radius.circular(8.0),
+                      ),
                     ),
-                  ),
-                  child: widget.food.fields.imageUrl.isNotEmpty
-                      ? Image.network(
-                          widget.food.fields.imageUrl,
-                          fit: BoxFit.cover,
-                          loadingBuilder: (context, child, loadingProgress) {
-                            if (loadingProgress == null) return child;
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          },
-                          errorBuilder: (context, error, stackTrace) {
-                            return const Center(
-                                child: Text('Failed to load image'));
-                          },
-                        )
-                      : Container(
-                          color: Colors.grey[300],
-                          child: const Center(
-                            child: Text(
-                              'No image',
-                              style: TextStyle(fontSize: 12.0),
+                    child: widget.food.fields.imageUrl.isNotEmpty
+                        ? Image.network(
+                            widget.food.fields.imageUrl,
+                            fit: BoxFit.cover,
+                            errorBuilder: (context, error, stackTrace) {
+                              return Image.asset(
+                                'assets/images/placeholder.png', // Path to your placeholder image
+                                fit: BoxFit.cover,
+                              );
+                            },
+                          )
+                        : Container(
+                            color: Colors.grey[300],
+                            child: const Center(
+                              child: Text(
+                                'No image',
+                                style: TextStyle(fontSize: 12.0),
+                              ),
                             ),
                           ),
-                        ),
-                ),
+                  ),
 
-                // content on the right
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(16.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          widget.food.fields.name,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                  // content on the right
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            widget.food.fields.name,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text.rich(
-                          TextSpan(
+                          const SizedBox(height: 8),
+                          Text.rich(
+                            TextSpan(
+                              children: [
+                                TextSpan(
+                                  text: "${widget.food.fields.streetAddress}, ",
+                                  style: const TextStyle(fontSize: 14),
+                                ),
+                                TextSpan(
+                                  text: widget.food.fields.location,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Wrap(
+                            children: _buildGenreStickers(
+                                widget.food.fields.foodType),
+                          ),
+                          const SizedBox(height: 8),
+                          Row(
                             children: [
-                              TextSpan(
-                                text: "${widget.food.fields.streetAddress}, ",
-                                style: const TextStyle(fontSize: 14),
-                              ),
-                              TextSpan(
-                                text: widget.food.fields.location,
+                              const Icon(Icons.star,
+                                  color: Colors.yellow, size: 16),
+                              const SizedBox(width: 4),
+                              Text(
+                                "${widget.food.fields.avgRating} ",
                                 style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const Text(
+                                "rating",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: Colors.black54,
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                        Wrap(
-                          children:
-                              _buildGenreStickers(widget.food.fields.foodType),
-                        ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            const Icon(Icons.star,
-                                color: Colors.yellow, size: 16),
-                            const SizedBox(width: 4),
-                            Text(
-                              "${widget.food.fields.avgRating} ",
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black,
-                              ),
-                            ),
-                            const Text(
-                              "rating",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.black54,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          if (_userRole == 'Restaurant_Manager')
-            Positioned(
-              top: 8,
-              right: 8,
-              child: Row(
-                children: [
-                  IconButton(
-                    icon: const Icon(Icons.edit, color: Colors.blue),
-                    tooltip: 'Edit Restaurant',
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) =>
-                              EditRestaurantForm(id: widget.food.pk),
-                        ),
-                      );
-                    },
-                  ),
-                  IconButton(
-                    icon: const Icon(Icons.delete, color: Colors.red),
-                    tooltip: 'Delete Restaurant',
-                    onPressed: () async {
-                      await _deleteRestaurant(context);
-                    },
                   ),
                 ],
               ),
             ),
-        ],
+            if (_userRole == 'Restaurant_Manager')
+              Positioned(
+                top: 8,
+                right: 8,
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.edit, color: Colors.blue),
+                      tooltip: 'Edit Restaurant',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                                EditRestaurantForm(id: widget.food.pk),
+                          ),
+                        );
+                      },
+                    ),
+                    IconButton(
+                      icon: const Icon(Icons.delete, color: Colors.red),
+                      tooltip: 'Delete Restaurant',
+                      onPressed: () async {
+                        await _deleteRestaurant(context);
+                      },
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
-    ),
-  );
-}
+    );
+  }
 }

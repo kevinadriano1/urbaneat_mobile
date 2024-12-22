@@ -6,17 +6,18 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import '../../restaurant/services/api_service.dart';
 
 class AddRestaurantForm extends StatefulWidget {
+  const AddRestaurantForm({super.key});
+
   @override
-  _AddRestaurantFormState createState() => _AddRestaurantFormState();
+  AddRestaurantFormState createState() => AddRestaurantFormState();
 }
 
 
 
-class _AddRestaurantFormState extends State<AddRestaurantForm> {
+class AddRestaurantFormState extends State<AddRestaurantForm> {
   final _formKey = GlobalKey<FormState>();
   late ApiService apiService;
 
-  // Controllers for the input fields
   final TextEditingController nameController = TextEditingController();
   final TextEditingController streetAddressController = TextEditingController();
   final TextEditingController locationController = TextEditingController();

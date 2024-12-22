@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:urbaneat/add_edit_resto/screens/add_resto.dart';
-
 import '../add_edit_resto/services/user_role_service.dart';
 import '../leaderboards/leaderboard_page.dart';
 import '../leaderboards/recommendations_page.dart';
@@ -13,7 +12,6 @@ class CarouselExample extends StatefulWidget {
 }
 
 class _CarouselExampleState extends State<CarouselExample> {
-  // List of image URLs for the cards
   final List<String> imageUrls = [
     'assets/images/leaderboards_carousel.jpg',
     'assets/images/recommend_carousel.jpg',
@@ -25,16 +23,14 @@ class _CarouselExampleState extends State<CarouselExample> {
   @override
   void initState() {
     super.initState();
-    _filteredImageUrls = List.from(imageUrls);  // Make a copy of the original image list
-    _fetchUserRole(); // Fetch user role when widget is created
+    _filteredImageUrls = List.from(imageUrls);  
+    _fetchUserRole(); 
   }
 
-  // Fetch user role using UserRoleService
   Future<void> _fetchUserRole() async {
     String userRole = await UserRoleService.fetchUserRole();
     setState(() {
       _userRole = userRole;
-      // Filter out the "Add Restaurant" card if the user is not a Restaurant Manager
       if (_userRole != 'Restaurant_Manager') {
         _filteredImageUrls.removeAt(2); 
       }
@@ -43,7 +39,6 @@ class _CarouselExampleState extends State<CarouselExample> {
 
   @override
   Widget build(BuildContext context) {
-    // Show a loading indicator while user role is being fetched
     if (_userRole == null) {
       return const Center(child: CircularProgressIndicator());
     }
@@ -74,7 +69,7 @@ class _CarouselExampleState extends State<CarouselExample> {
             return UncontainedLayoutCard(
               index: index,
               label: 'Item $index',
-              imageUrl: _filteredImageUrls[index],  // Pass the filtered image URL to the card
+              imageUrl: _filteredImageUrls[index], 
             );
           }),
         ),
@@ -87,16 +82,15 @@ class UncontainedLayoutCard extends StatelessWidget {
     super.key,
     required this.index,
     required this.label,
-    required this.imageUrl,  // Add imageUrl parameter
+    required this.imageUrl, 
   });
 
   final int index;
   final String label;
-  final String imageUrl;  // Store the image URL
+  final String imageUrl; 
 
   @override
   Widget build(BuildContext context) {
-    // Define the text for specific index cards
     String? cardText;
     if (index == 0) {
       cardText = 'Leaderboards';
@@ -112,7 +106,6 @@ class UncontainedLayoutCard extends StatelessWidget {
     
     return Stack(
         children: [
-          // Background image
           ClipRect(
             child: Image.asset(
               imageUrl,
@@ -121,8 +114,7 @@ class UncontainedLayoutCard extends StatelessWidget {
               height: double.infinity,
             ),
           ),
-          // Centered text
-          if (cardText != null) // Only show the text if it's set
+          if (cardText != null) 
             Center(
               child: Text(
                 cardText,
