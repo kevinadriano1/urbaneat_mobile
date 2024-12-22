@@ -129,7 +129,8 @@ class _LoginPageState extends State<LoginPage> {
                           // Check credentials
                           final response = await request.login(
                             //untag this for production
-                            "http://localhost:8000/auth/login_flutter/", 
+                            'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/auth/login_flutter/',
+                            //"http://localhost:8000/auth/login_flutter/", 
                             {
                             'username': username,
                             'password': password,

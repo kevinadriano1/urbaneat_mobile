@@ -151,7 +151,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
             title: const Text('Log out'),
             onTap: () async {
               final response =
-                  await request.logout("http://localhost:8000/auth/logout_flutter/");
+                  await request.logout("https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/auth/logout_flutter/");
               String message = response["message"];
               if (context.mounted) {
                 if (response['status']) {
