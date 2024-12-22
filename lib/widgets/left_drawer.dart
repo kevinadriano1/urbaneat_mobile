@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:pbp_django_auth/pbp_django_auth.dart';
+import 'package:provider/provider.dart';
 import 'package:urbaneat/restaurant/screens/list_foodentry.dart';
 import 'package:urbaneat/screens/menu.dart';
 import '../add_edit_resto/services/user_role_service.dart';
@@ -6,6 +8,8 @@ import 'package:urbaneat/leaderboards/leaderboard_page.dart';
 import 'package:urbaneat/leaderboards/recommendations_page.dart';
 import '../add_edit_resto/screens/add_resto.dart';
 import 'package:urbaneat/user_roles/profile.dart';
+
+import '../screens/login.dart';
 
 class LeftDrawer extends StatefulWidget {
   const LeftDrawer({super.key});
@@ -33,6 +37,8 @@ class _LeftDrawerState extends State<LeftDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final request = context.watch<CookieRequest>();
+
     return Drawer(
       child: ListView(
         children: [
@@ -143,7 +149,28 @@ class _LeftDrawerState extends State<LeftDrawer> {
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
             title: const Text('Log out'),
-            onTap: () {
+            onTap: () async {
+              final response =
+                  await request.logout("http://localhost:8000/auth/logout_flutter/");
+              String message = response["message"];
+              if (context.mounted) {
+                if (response['status']) {
+                  String uname = response["username"];
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text("$message Goodbye, $uname."),
+                  ));
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(message),
+                    ),
+                  );
+                }
+              }
               //put yer code here yur
             },
           ),

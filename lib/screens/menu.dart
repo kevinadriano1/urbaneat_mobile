@@ -35,7 +35,6 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<ItemHomepage> items = [
     ItemHomepage("View Restaurant", Icons.mood),
     ItemHomepage("Add Restaurant", Icons.add),
-    ItemHomepage("Logout", Icons.logout),
   ];
 
   final TextEditingController searchController = TextEditingController();
