@@ -44,7 +44,7 @@
 
 # Link to the APK 
 [![Build status](https://build.appcenter.ms/v0.1/apps/994f8cd4-713b-4a7f-bee0-9f32bec0a8c2/branches/main/badge)](https://appcenter.ms)
-https://install.appcenter.ms/orgs/urbaneat/apps/urbaneat/distribution_groups/public/releases/12 
+https://install.appcenter.ms/orgs/urbaneat/apps/urbaneat/distribution_groups/public/releases/16
 
 # Mock Up
 ### View Full Figma Mock-Up here: 
@@ -122,3 +122,7 @@ This feature allows for logging in and registration of existing and new users wi
 - Use the authentication model for login, logout, and registration created in the previous task to provide users with authorization based on their roles as readers or writers.
 - Utilize the `pbp_django_auth` package to manage cookies, ensuring that all requests sent to the server are authenticated and authorized.
 - Use https://app.quicktype.io/ to convert JSON data into Dart objects that will be used to create an instance of data as a class in Flutter.
+
+For integrating Django to Flutter, we made new functions in our Django's views.py. In admin_roles, we made add_resto_api(), edit_resto_api() and delete_resto_api(). In authentication, we made logout_flutter(), login_flutter() and register_flutter(). In reviews, we made restaurant_detail_json(), and add_review_flutter(). In leaderboards, we had leaderboards_json() and recommendations_json()! 
+
+We also attempted to make an Apiservice class in flutter to help with switching between localhost and our pws site, which we further supplemented with environmental variables
