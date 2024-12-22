@@ -44,7 +44,7 @@
 
 # Link to the APK 
 [![Build status](https://build.appcenter.ms/v0.1/apps/994f8cd4-713b-4a7f-bee0-9f32bec0a8c2/branches/main/badge)](https://appcenter.ms)
-https://install.appcenter.ms/orgs/urbaneat/apps/urbaneat/distribution_groups/public/releases/1
+https://install.appcenter.ms/orgs/urbaneat/apps/urbaneat/distribution_groups/public/releases/12 
 
 # Mock Up
 ### View Full Figma Mock-Up here: 
