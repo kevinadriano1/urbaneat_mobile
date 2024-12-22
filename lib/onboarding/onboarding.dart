@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:urbaneat/screens/login.dart'; // Ensure the correct path to `LoginPage` is imported.
+import 'package:urbaneat/screens/login.dart'; 
 
 class OnBoardingScreen extends StatelessWidget {
   @override
@@ -7,7 +7,6 @@ class OnBoardingScreen extends StatelessWidget {
     return Scaffold(
       body: Stack(
         children: [
-          // Background image
           Container(
             decoration: const BoxDecoration(
               image: DecorationImage(
@@ -16,12 +15,11 @@ class OnBoardingScreen extends StatelessWidget {
               ),
             ),
           ),
-          // White box
           Column(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Container(
-                width: double.infinity, // Make the white box span full width
+                width: double.infinity,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                 decoration: const BoxDecoration(
                   color: Colors.white,
@@ -31,7 +29,6 @@ class OnBoardingScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    // Logo and app name
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -60,10 +57,8 @@ class OnBoardingScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    // Get Started button
                     ElevatedButton(
                       onPressed: () {
-                        // Navigate to LoginPage
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => const LoginPage()),
@@ -83,7 +78,7 @@ class OnBoardingScreen extends StatelessWidget {
                         'Get Started',
                         style: TextStyle(
                           fontSize: 16,
-                          color: Colors.white, // Set the text color to white
+                          color: Colors.white, 
                         ),
                       ),
                     ),

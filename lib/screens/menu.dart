@@ -478,7 +478,6 @@ class _MyHomePageState extends State<MyHomePage> {
     final response = await request
         .get(
           'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/json/'
-          //'http://localhost:8000/json/'
           );
     var data = response;
 
