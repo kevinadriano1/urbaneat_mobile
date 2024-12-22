@@ -309,7 +309,15 @@ class _MyHomePageState extends State<MyHomePage> {
                         },
                       );
                     },
-                    child: const Text("Filter"),
+                    style: ElevatedButton.styleFrom(
+                          backgroundColor: Theme.of(context).colorScheme.tertiary, 
+                        ),
+                    child: Text(
+                      "Filter",
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onTertiary,
+                      ),
+                    ),
                   ),
                   const SizedBox(height: 16.0),
                   const Text(

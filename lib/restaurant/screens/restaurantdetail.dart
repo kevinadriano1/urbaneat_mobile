@@ -27,7 +27,8 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
 
   void _refreshDetails() {
     setState(() {
-      _restaurantDetails = apiService.fetchRestaurantDetails(widget.restaurantId);
+      _restaurantDetails =
+          apiService.fetchRestaurantDetails(widget.restaurantId);
     });
   }
 
@@ -120,7 +121,14 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                           ),
-                          child: const Text('Visit Site'),
+                          child: Text(
+                            'Visit Site',
+                            style: TextStyle(
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .onTertiary,
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -135,7 +143,8 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                       children: [
                         const Text(
                           "Details",
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold),
                         ),
                         const SizedBox(height: 8),
                         Text("Location: ${restaurant['location']}"),
@@ -155,7 +164,8 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                     padding: EdgeInsets.symmetric(horizontal: 16.0),
                     child: Text(
                       "Reviews",
-                      style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -211,8 +221,8 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (_) =>
-                                AddReviewPage(restaurantId: widget.restaurantId),
+                            builder: (_) => AddReviewPage(
+                                restaurantId: widget.restaurantId),
                           ),
                         ).then((value) {
                           if (value == true) {
@@ -220,7 +230,17 @@ class _RestaurantDetailPageState extends State<RestaurantDetailPage> {
                           }
                         });
                       },
-                      child: const Text('Add Review'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Theme.of(context).colorScheme.tertiary,
+                      ),
+                      child: Text(
+                        'Add Review',
+                        style: TextStyle(
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onTertiary,
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 16),

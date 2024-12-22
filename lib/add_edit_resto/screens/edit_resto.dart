@@ -3,7 +3,7 @@ import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:urbaneat/restaurant/services/api_service.dart';
 
 class EditRestaurantForm extends StatefulWidget {
-  final String id; // Restaurant ID to be edited
+  final String id; 
   const EditRestaurantForm({required this.id});
 
   @override
@@ -28,8 +28,8 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
   @override
   void initState() {
     super.initState();
-    apiService = ApiService(CookieRequest()); // Initialize ApiService
-    fetchRestaurantDetails(); // Load existing restaurant data
+    apiService = ApiService(CookieRequest()); 
+    fetchRestaurantDetails(); // load existing restaurant data
   }
 
   Future<void> fetchRestaurantDetails() async {
@@ -83,42 +83,63 @@ class _EditRestaurantFormState extends State<EditRestaurantForm> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Edit Restaurant'),
-        centerTitle: true,
-      ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                buildInputField('Name', nameController),
-                buildInputField('Street Address', streetAddressController),
-                buildInputField('Location', locationController),
-                buildInputField('Food Type', foodTypeController),
-                buildInputField('Description', descriptionController, maxLines: 3),
-                buildInputField('Contact Number', contactNumberController),
-                buildInputField('Restaurant URL', restaurantUrlController),
-                buildInputField('Menu Info', menuInfoController, maxLines: 3),
-                buildInputField('Image URL', imageUrlController),
-                const SizedBox(height: 20),
-                Center(
-                  child: ElevatedButton(
-                    onPressed: submitForm,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
-                    ),
-                    child: const Text(
-                      'Save',
-                      style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+      body: NestedScrollView(
+        headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
+          return [
+            SliverAppBar(
+              expandedHeight: MediaQuery.of(context).size.height * 0.33, 
+              pinned: false,
+              flexibleSpace: FlexibleSpaceBar(
+                background: Image.network(
+                  imageUrlController.text.isNotEmpty
+                      ? imageUrlController.text
+                      : 'https://via.placeholder.com/150', 
+                  fit: BoxFit.cover,
+                ),
+              ),
+            ),
+          ];
+        },
+        body: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(16),
+              topRight: Radius.circular(16),
+            ),
+          ),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  buildInputField('Name', nameController),
+                  buildInputField('Street Address', streetAddressController),
+                  buildInputField('Location', locationController),
+                  buildInputField('Food Type', foodTypeController),
+                  buildInputField('Description', descriptionController, maxLines: 3),
+                  buildInputField('Contact Number', contactNumberController),
+                  buildInputField('Restaurant URL', restaurantUrlController),
+                  buildInputField('Menu Info', menuInfoController, maxLines: 3),
+                  buildInputField('Image URL', imageUrlController),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: submitForm,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.black,
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                      ),
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ),
