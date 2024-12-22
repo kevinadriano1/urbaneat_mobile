@@ -7,7 +7,6 @@ import 'package:urbaneat/restaurant/screens/restaurantdetail.dart';
 import 'package:urbaneat/widgets/left_drawer.dart';
 import 'package:provider/provider.dart';
 
-
 class FoodEntryPage extends StatefulWidget {
   const FoodEntryPage({super.key});
 
@@ -86,21 +85,21 @@ class FoodCard extends StatefulWidget {
 class _FoodCardState extends State<FoodCard> {
   String? _userRole;
 
-  // fetch the user role from SharedPreferences
   Future<void> _fetchUserRole() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _userRole = prefs.getString('userRole') ?? 'User'; // Default to user if role is not set
+      _userRole = prefs.getString('userRole') ??
+          'User'; 
     });
   }
 
   @override
   void initState() {
     super.initState();
-    _fetchUserRole(); // ffffetch user role when widget is created
+    _fetchUserRole();
   }
 
-  // delete restaurant
+  // Delete restaurant
   Future<void> _deleteRestaurant(BuildContext context) async {
     try {
       final response = await widget.apiService.deleteRestaurant(widget.food.pk);
@@ -114,9 +113,40 @@ class _FoodCardState extends State<FoodCard> {
     }
   }
 
+  List<Widget> _buildGenreStickers(String foodType) {
+    final genres = foodType.split(',').map((genre) => genre.trim()).take(3);
+    return genres.map((genre) {
+      return Container(
+        margin: const EdgeInsets.only(right: 8.0, bottom: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+        decoration: BoxDecoration(
+          color: Colors.primaries[
+                  genres.toList().indexOf(genre) % Colors.primaries.length]
+              .withOpacity(0.3),
+          borderRadius: BorderRadius.circular(16.0),
+        ),
+        child: Text(
+          genre,
+          style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+        ),
+      );
+    }).toList();
+  }
+
   @override
-  Widget build(BuildContext context) {
-    return Container(
+Widget build(BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => RestaurantDetailPage(
+            restaurantId: widget.food.pk,
+          ),
+        ),
+      );
+    },
+    child: Container(
       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -132,57 +162,95 @@ class _FoodCardState extends State<FoodCard> {
       ),
       child: Stack(
         children: [
-          InkWell(
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => RestaurantDetailPage(
-                    restaurantId: widget.food.pk,
-                  ),
-                ),
-              );
-            },
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    widget.food.fields.name,
-                    style: const TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    
-                  ),
-                  const SizedBox(height: 8),
-                  Text("Address: ${widget.food.fields.streetAddress}"),
-                  const SizedBox(height: 8),
-                  Text("Location: ${widget.food.fields.location}"),
-                  const SizedBox(height: 8),
-                  Text("Food Type: ${widget.food.fields.foodType}"),
-                  const SizedBox(height: 8),
-                  Text(
-                    "Average Rating: ${widget.food.fields.avgRating}",
-                    style: const TextStyle(
-                      fontSize: 16.0,
-                      color: Colors.black,
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // image on the left
+                Container(
+                  width: MediaQuery.of(context).size.width / 6,
+                  height: double.infinity, 
+                  clipBehavior: Clip.hardEdge,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(8.0),
                     ),
                   ),
-                  const SizedBox(height: 8),
-                  widget.food.fields.imageUrl.isNotEmpty
+                  child: widget.food.fields.imageUrl.isNotEmpty
                       ? Image.network(
                           widget.food.fields.imageUrl,
-                          height: 200,
-                          width: double.infinity,
                           fit: BoxFit.cover,
+                          loadingBuilder: (context, child, loadingProgress) {
+                            if (loadingProgress == null) return child;
+                            return const Center(
+                              child: CircularProgressIndicator(),
+                            );
+                          },
+                          errorBuilder: (context, error, stackTrace) {
+                            return const Center(
+                                child: Text('Failed to load image'));
+                          },
                         )
-                      : const Text('No image available'),
-                ],
-              ),
+                      : Container(
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: Text(
+                              'No image',
+                              style: TextStyle(fontSize: 12.0),
+                            ),
+                          ),
+                        ),
+                ),
+
+                // content on the right
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.food.fields.name,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          "Address: ${widget.food.fields.streetAddress}",
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        const SizedBox(height: 8),
+                        Wrap(
+                          children:
+                              _buildGenreStickers(widget.food.fields.foodType),
+                        ),
+                        const SizedBox(height: 8),
+                        Row(
+                          children: [
+                            const Icon(Icons.star,
+                                color: Colors.yellow, size: 16),
+                            const SizedBox(width: 4),
+                            Text(
+                              "${widget.food.fields.avgRating}",
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
+
           if (_userRole == 'Restaurant_Manager')
             Positioned(
               top: 8,
@@ -196,7 +264,8 @@ class _FoodCardState extends State<FoodCard> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (_) => EditRestaurantForm(id: widget.food.pk),
+                          builder: (_) =>
+                              EditRestaurantForm(id: widget.food.pk),
                         ),
                       );
                     },
@@ -213,6 +282,8 @@ class _FoodCardState extends State<FoodCard> {
             ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
+
 }
