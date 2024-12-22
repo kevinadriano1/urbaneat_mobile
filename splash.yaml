@@ -1,12 +1,12 @@
 flutter_native_splash:
   color: "#00000F"
   color_dark: "#000000"
-  image: assets\icons\urbaneat_white.png
-  image_dark: assets\icons\urbaneat_white.png
+  image: assets\icons\splash_icon.png
+  image_dark: assets\icons\splash_icon.png
   android_12:
     color: "#00000F"
     color_dark: "#000000"
-    image: assets\icons\urbaneat_white.png
-    image_dark: assets\icons\urbaneat_white.png
+    image: assets\icons\splash_icon.png
+    image_dark: assets\icons\splash_icon.png
 
   web: true

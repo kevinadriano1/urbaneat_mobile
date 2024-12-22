@@ -257,7 +257,7 @@ Widget build(BuildContext context) {
           ),
           if (_userRole == 'Restaurant_Manager')
             Positioned(
-              top: 0, // Reduced spacing
+              bottom: 0, // Reduced spacing
               right: 0,
               child: Row(
                 children: [
