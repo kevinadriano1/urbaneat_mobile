@@ -9,5 +9,6 @@ part of 'env.dart';
 // coverage:ignore-file
 // ignore_for_file: type=lint
 final class _Env {
-  static const String backendUrl = 'http://127.0.0.1:8000';
+  static const String backendUrl =
+      'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id';
 }

@@ -138,6 +138,13 @@ class _LeftDrawerState extends State<LeftDrawer> {
               );
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.person),
+            title: const Text('Log out'),
+            onTap: () {
+              //put yer code here yur
+            },
+          ),
         ],
       ),
     );

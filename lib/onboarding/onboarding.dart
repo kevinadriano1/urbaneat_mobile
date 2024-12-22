@@ -36,7 +36,7 @@ class OnBoardingScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          'assets/icons/urbaneat_black.png',
+                          'assets/icons/black_urbaneat_thicc.png',
                           height: 40,
                         ),
                         const SizedBox(width: 10),

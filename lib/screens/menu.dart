@@ -5,13 +5,11 @@ import 'package:urbaneat/restaurant/models/food_entry.dart';
 import 'package:pbp_django_auth/pbp_django_auth.dart';
 import 'package:provider/provider.dart';
 import 'dart:io';
-
-
-import '../add_edit_resto/screens/add_resto.dart';
-import '../add_edit_resto/services/user_role_service.dart';
 import '../restaurant/services/api_service.dart';
 import 'package:urbaneat/user_roles/profile.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../widgets/carousel.dart';
 
 class ItemHomepage {
   final String name;
@@ -203,13 +201,10 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          'URBANEATS',
-          style: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
+        title: Image.asset(
+                          'assets/icons/white_urbaneat_thicc.png',
+                          height: 40,
+                        ),
         backgroundColor: Colors.black,
       ),
       drawer: const LeftDrawer(),
@@ -228,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: const [
         Text(
-          'Hi, Paul',
+          'Welcome, UrbanEater.',
           style: TextStyle(
             fontSize: 24.0,
             fontWeight: FontWeight.bold,
@@ -320,6 +315,9 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                   const SizedBox(height: 16.0),
+                  const CarouselExample(),
+                  const SizedBox(height: 16.0),
+                  /*
                   const Text(
                     'Top 3 on Leaderboards',
                     style: TextStyle(
@@ -341,7 +339,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 16.0),
+                  const SizedBox(height: 16.0),*/
                   const Text(
                     'All Restaurants',
                     style: TextStyle(
@@ -391,8 +389,8 @@ class _MyHomePageState extends State<MyHomePage> {
                           itemCount: filteredData.length,
                           itemBuilder: (_, index) {
                             final food = filteredData[index];
-                            //NOTIFIER: i made the inkwell returned here originally become a food card widget from the list_foodentry.dart so that it would
-                            //be reusable
+            
+            
                             return FoodCard(
                               food: food,
                               apiService: apiService,
@@ -479,8 +477,8 @@ class _MyHomePageState extends State<MyHomePage> {
   Future<List<FoodEntry>> fetchFoodEntries(CookieRequest request) async {
     final response = await request
         .get(
-          //'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/json/'
-          'http://localhost:8000/json/'
+          'https://kevin-adriano-urbaneat2.pbp.cs.ui.ac.id/json/'
+          //'http://localhost:8000/json/'
           );
     var data = response;
 
@@ -507,89 +505,6 @@ class FilterChipWidget extends StatelessWidget {
       onSelected: (bool selected) {},
       backgroundColor: Colors.grey[200],
       selectedColor: Theme.of(context).colorScheme.primary,
-    );
-  }
-}
-
-class ItemCard extends StatefulWidget {
-  final ItemHomepage item;
-
-  const ItemCard(this.item, {super.key});
-
-  @override
-  _ItemCardState createState() => _ItemCardState();
-}
-
-class _ItemCardState extends State<ItemCard> {
-  String? _userRole;
-
-  @override
-  void initState() {
-    super.initState();
-    _fetchUserRole(); // Fetch user role when widget is created
-  }
-
-  // Fetch user role using UserRoleService
-  Future<void> _fetchUserRole() async {
-    String userRole = await UserRoleService.fetchUserRole();
-    setState(() {
-      _userRole = userRole;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Theme.of(context).colorScheme.secondary,
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: () {
-          ScaffoldMessenger.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(SnackBar(
-                content: Text("You pressed the ${widget.item.name} button!")));
-
-          if (widget.item.name == "Add Restaurant" && _userRole == 'Restaurant_Manager') {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => AddRestaurantForm()),
-            );
-          } else if (widget.item.name == "View Restaurant") {
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const FoodEntryPage()),
-            );
-          }
-        },
-        child: Visibility(
-          visible: widget.item.name != "Add Restaurant" || _userRole == 'Restaurant_Manager',
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            constraints: const BoxConstraints(
-              minWidth: 100.0,
-              maxWidth: 120.0,
-            ),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    widget.item.icon,
-                    color: Colors.white,
-                    size: 30.0,
-                  ),
-                  const Padding(padding: EdgeInsets.all(3)),
-                  Text(
-                    widget.item.name,
-                    textAlign: TextAlign.center,
-                    style: const TextStyle(color: Colors.white),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }

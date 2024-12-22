@@ -79,10 +79,10 @@ class FoodCard extends StatefulWidget {
   final ApiService apiService;
 
   @override
-  _FoodCardState createState() => _FoodCardState();
+  FoodCardState createState() => FoodCardState();
 }
 
-class _FoodCardState extends State<FoodCard> {
+class FoodCardState extends State<FoodCard> {
   String? _userRole;
 
   Future<void> _fetchUserRole() async {
@@ -99,7 +99,6 @@ class _FoodCardState extends State<FoodCard> {
     _fetchUserRole();
   }
 
-  // Delete restaurant
   Future<void> _deleteRestaurant(BuildContext context) async {
     try {
       final response = await widget.apiService.deleteRestaurant(widget.food.pk);
@@ -115,14 +114,14 @@ class _FoodCardState extends State<FoodCard> {
 
   List<Widget> _buildGenreStickers(String foodType) {
     final genres = foodType.split(',').map((genre) => genre.trim()).take(3);
+    final colors = [Colors.orange, Colors.yellow, Colors.blue];
     return genres.map((genre) {
+      final color = colors[genres.toList().indexOf(genre) % colors.length];
       return Container(
         margin: const EdgeInsets.only(right: 8.0, bottom: 8.0),
         padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
         decoration: BoxDecoration(
-          color: Colors.primaries[
-                  genres.toList().indexOf(genre) % Colors.primaries.length]
-              .withOpacity(0.3),
+          color: color.withOpacity(0.3),
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Text(
@@ -133,7 +132,7 @@ class _FoodCardState extends State<FoodCard> {
     }).toList();
   }
 
-  @override
+ @override
 Widget build(BuildContext context) {
   return GestureDetector(
     onTap: () {
@@ -169,7 +168,7 @@ Widget build(BuildContext context) {
                 // image on the left
                 Container(
                   width: MediaQuery.of(context).size.width / 6,
-                  height: double.infinity, 
+                  height: double.infinity,
                   clipBehavior: Clip.hardEdge,
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -218,9 +217,22 @@ Widget build(BuildContext context) {
                           ),
                         ),
                         const SizedBox(height: 8),
-                        Text(
-                          "Address: ${widget.food.fields.streetAddress}",
-                          style: const TextStyle(fontSize: 14),
+                        Text.rich(
+                          TextSpan(
+                            children: [
+                              TextSpan(
+                                text: "${widget.food.fields.streetAddress}, ",
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                              TextSpan(
+                                text: widget.food.fields.location,
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         const SizedBox(height: 8),
                         Wrap(
@@ -234,11 +246,18 @@ Widget build(BuildContext context) {
                                 color: Colors.yellow, size: 16),
                             const SizedBox(width: 4),
                             Text(
-                              "${widget.food.fields.avgRating}",
+                              "${widget.food.fields.avgRating} ",
                               style: const TextStyle(
                                 fontSize: 16,
                                 fontWeight: FontWeight.w600,
                                 color: Colors.black,
+                              ),
+                            ),
+                            const Text(
+                              "rating",
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Colors.black54,
                               ),
                             ),
                           ],
@@ -285,5 +304,4 @@ Widget build(BuildContext context) {
     ),
   );
 }
-
 }
