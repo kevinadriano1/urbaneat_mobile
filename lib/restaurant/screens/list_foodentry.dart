@@ -117,185 +117,175 @@ class FoodCardState extends State<FoodCard> {
     return genres.map((genre) {
       final color = colors[genres.toList().indexOf(genre) % colors.length];
       return Container(
-        margin: const EdgeInsets.only(right: 8.0, bottom: 8.0),
-        padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+        margin: const EdgeInsets.only(right: 4.0, bottom: 8.0),
+        padding: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
         decoration: BoxDecoration(
           color: color.withOpacity(0.3),
           borderRadius: BorderRadius.circular(16.0),
         ),
         child: Text(
           genre,
-          style: const TextStyle(fontSize: 12.0, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 10.0, fontWeight: FontWeight.w600),
         ),
       );
     }).toList();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (_) => RestaurantDetailPage(
-              restaurantId: widget.food.pk,
+ @override
+Widget build(BuildContext context) {
+  return GestureDetector(
+    onTap: () {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (_) => RestaurantDetailPage(
+            restaurantId: widget.food.pk,
+          ),
+        ),
+      );
+    },
+    child: Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(8.0),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.5),
+            spreadRadius: 1,
+            blurRadius: 3,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Stack(
+        children: [
+          IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                // Image on the left
+                Container(
+                  width: MediaQuery.of(context).size.width / 6,
+                  height: double.infinity,
+                  clipBehavior: Clip.hardEdge,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(8.0),
+                      bottomLeft: Radius.circular(8.0),
+                    ),
+                  ),
+                  child: widget.food.fields.imageUrl.isNotEmpty
+                      ? Image.network(
+                          widget.food.fields.imageUrl,
+                          fit: BoxFit.cover,
+                          errorBuilder: (context, error, stackTrace) {
+                            return Image.asset(
+                              'assets/images/placeholder.png', // Path to your placeholder image
+                              fit: BoxFit.cover,
+                            );
+                          },
+                        )
+                      : Container(
+                          color: Colors.grey[300],
+                          child: const Center(
+                            child: Text(
+                              'No image',
+                              style: TextStyle(fontSize: 10.0),
+                            ),
+                          ),
+                        ),
+                ),
+
+                // Content on the right
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0), // Reduced padding
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          widget.food.fields.name,
+                          style: const TextStyle(
+                            fontSize: 14, // Smaller font size
+                            fontWeight: FontWeight.bold,
+                          ),
+                          maxLines: 1, // Limit to 1 line
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          "${widget.food.fields.streetAddress}, ${widget.food.fields.location}",
+                          style: const TextStyle(fontSize: 12),
+                          maxLines: 2, // Limit to 2 lines
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        const SizedBox(height: 4),
+                        Wrap(
+                          spacing: 4, // Reduce spacing between genres
+                          children: _buildGenreStickers(widget.food.fields.foodType),
+                        ),
+                        const SizedBox(height: 4),
+                        Row(
+                          children: [
+                            const Icon(Icons.star, color: Colors.yellow, size: 12),
+                            const SizedBox(width: 4),
+                            Text(
+                              "${widget.food.fields.avgRating} ",
+                              style: const TextStyle(
+                                fontSize: 12, // Smaller font size
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                            const Text(
+                              "rating",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.black54,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
-        );
-      },
-      child: Container(
-        margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.5),
-              spreadRadius: 2,
-              blurRadius: 5,
-              offset: const Offset(0, 3),
-            ),
-          ],
-        ),
-        child: Stack(
-          children: [
-            IntrinsicHeight(
+          if (_userRole == 'Restaurant_Manager')
+            Positioned(
+              top: 0, // Reduced spacing
+              right: 0,
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  // image on the left
-                  Container(
-                    width: MediaQuery.of(context).size.width / 6,
-                    height: double.infinity,
-                    clipBehavior: Clip.hardEdge,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8.0),
-                        bottomLeft: Radius.circular(8.0),
-                      ),
-                    ),
-                    child: widget.food.fields.imageUrl.isNotEmpty
-                        ? Image.network(
-                            widget.food.fields.imageUrl,
-                            fit: BoxFit.cover,
-                            errorBuilder: (context, error, stackTrace) {
-                              return Image.asset(
-                                'assets/images/placeholder.png', // Path to your placeholder image
-                                fit: BoxFit.cover,
-                              );
-                            },
-                          )
-                        : Container(
-                            color: Colors.grey[300],
-                            child: const Center(
-                              child: Text(
-                                'No image',
-                                style: TextStyle(fontSize: 12.0),
-                              ),
-                            ),
-                          ),
+                  IconButton(
+                    icon: const Icon(Icons.edit, color: Colors.blue, size: 12), // Smaller icons
+                    tooltip: 'Edit Restaurant',
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => EditRestaurantForm(id: widget.food.pk),
+                        ),
+                      );
+                    },
                   ),
-
-                  // content on the right
-                  Expanded(
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            widget.food.fields.name,
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Text.rich(
-                            TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: "${widget.food.fields.streetAddress}, ",
-                                  style: const TextStyle(fontSize: 14),
-                                ),
-                                TextSpan(
-                                  text: widget.food.fields.location,
-                                  style: const TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Wrap(
-                            children: _buildGenreStickers(
-                                widget.food.fields.foodType),
-                          ),
-                          const SizedBox(height: 8),
-                          Row(
-                            children: [
-                              const Icon(Icons.star,
-                                  color: Colors.yellow, size: 16),
-                              const SizedBox(width: 4),
-                              Text(
-                                "${widget.food.fields.avgRating} ",
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              const Text(
-                                "rating",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  color: Colors.black54,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
+                  IconButton(
+                    icon: const Icon(Icons.delete, color: Colors.red, size: 12), // Smaller icons
+                    tooltip: 'Delete Restaurant',
+                    onPressed: () async {
+                      await _deleteRestaurant(context);
+                    },
                   ),
                 ],
               ),
             ),
-            if (_userRole == 'Restaurant_Manager')
-              Positioned(
-                top: 8,
-                right: 8,
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.edit, color: Colors.blue),
-                      tooltip: 'Edit Restaurant',
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) =>
-                                EditRestaurantForm(id: widget.food.pk),
-                          ),
-                        );
-                      },
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.delete, color: Colors.red),
-                      tooltip: 'Delete Restaurant',
-                      onPressed: () async {
-                        await _deleteRestaurant(context);
-                      },
-                    ),
-                  ],
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
-    );
-  }
+    ),
+  );
+}
 }
