@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/ae054a75-184d-4638-bdfe-28e516bceb5f)## Group Members
+## Group Members
 <table>
   <thead>
     <tr>
